@@ -4,7 +4,7 @@ import eslintPlugin from 'vite-plugin-eslint';
 
 export default defineConfig({
     plugins: [
-        eslintPlugin(),
+        //eslintPlugin(),
         vue()
     ],
     define: {

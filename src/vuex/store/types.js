@@ -1,5 +1,22 @@
-export const actions = {};
+export const actions = {
+  FETCH_USERS: "FETCH_USERS",
+  FETCH_LISTS: "FETCH_LISTS",
+  FETCH_TASKS: "FETCH_TASKS",
+  FETCH_CURRENT_USER: "FETCH_CURRENT_USER",
+  DELETE_LIST: "DELETE_LIST",
+  DELETE_TASK: "DELETE_TASK",
+};
 
-export const mutations = {};
+export const mutations = {
+  SET_USERS: "SET_USERS",
+  SET_LISTS: "SET_LISTS",
+  SET_TASKS: "SET_TASKS",
+  SET_CURRENT_USER: "SET_CURRENT_USER",
+};
 
-export const getters = {};
+export const getters = {
+  GET_USERS: "GET_USERS",
+  GET_LISTS: "GET_LISTS",
+  GET_TASKS: "GET_TASKS",
+  GET_CURRENT_USER: "GET_CURRENT_USER",
+};

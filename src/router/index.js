@@ -40,6 +40,38 @@ const routes = [
     name: routeInfo.NotFound.name,
     component: () => routeInfo.NotFound.component,
   },
+  {
+    path: routeInfo.Users.path,
+    name: routeInfo.Users.name,
+    component: () => routeInfo.Users.component,
+    meta: {
+      middleware: [authorized],
+    },
+  },
+  {
+    path: routeInfo.Lists.path,
+    name: routeInfo.Lists.name,
+    component: () => routeInfo.Lists.component,
+    meta: {
+      middleware: [authorized],
+    },
+  },
+  {
+    path: routeInfo.Tasks.path,
+    name: routeInfo.Tasks.name,
+    component: () => routeInfo.Tasks.component,
+    meta: {
+      middleware: [authorized],
+    },
+  },
+  {
+    path: routeInfo.User.path,
+    name: routeInfo.User.name,
+    component: () => routeInfo.User.component,
+    meta: {
+      middleware: [authorized],
+    },
+  },
 ];
 
 const router = createRouter({

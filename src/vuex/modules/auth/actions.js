@@ -1,11 +1,11 @@
-import myMmDbApi from "../../../api/myMmDbApi";
+import mainDbApi from "../../../api/mainDbApi";
 import routeInfo from "../../../router/routeInfo";
 import { mutations as mutationTypes, actions as actionTypes } from "./types";
 import router from "../../../router";
 
 export default {
   [actionTypes.AUTH_REQUEST]({ commit }, data) {
-    myMmDbApi()
+    mainDbApi()
       .auth(data)
       .then((result) => {
         commit(mutationTypes.SET_AUTH_TOKEN, result.data);
@@ -20,7 +20,7 @@ export default {
       });
   },
   [actionTypes.REGISTER]({ commit }, data) {
-    myMmDbApi()
+    mainDbApi()
       .register(data)
       .then((result) => {
         commit(mutationTypes.FIRST, result);
