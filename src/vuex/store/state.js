@@ -1,7 +1,7 @@
 const state = {
   users: [],
-  lists: [],
-  tasks: [],
+  participants: [],
+  employers: [],
   currentUser: {},
 };
 

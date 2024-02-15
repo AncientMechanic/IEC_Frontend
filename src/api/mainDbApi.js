@@ -38,17 +38,17 @@ export default (token) => {
     });
   };
 
-  const _getAllLists = () => {
+  const _getAllParticipants = () => {
     return axios({
-      url: `${baseUrl}list`,
+      url: `${baseUrl}participant`,
       method: "GET",
       headers: headers,
     });
   };
 
-  const _getAllTasks = () => {
+  const _getAllEmployers = () => {
     return axios({
-      url: `${baseUrl}task`,
+      url: `${baseUrl}employer`,
       method: "GET",
       headers: headers,
     });
@@ -63,21 +63,21 @@ export default (token) => {
     });
   };
 
-  const _deleteList = (listId) => {
+  const _deleteParticipant = (participantId) => {
     return axios({
-      url: `${baseUrl}list/${listId}`,
+      url: `${baseUrl}participant/${participantId}`,
       method: "DELETE",
       headers: headers,
-      data: listId,
+      data: participantId,
     });
   };
 
-  const _deleteTask = (taskId) => {
+  const _deleteEmployer = (employerId) => {
     return axios({
-      url: `${baseUrl}task/${taskId}`,
+      url: `${baseUrl}employer/${employerId}`,
       method: "DELETE",
       headers: headers,
-      data: taskId,
+      data: employerId,
     });
   };
 
@@ -85,10 +85,10 @@ export default (token) => {
     auth: _auth,
     register: _register,
     getAllUsers: _getAllUsers,
-    getAllLists: _getAllLists,
-    getAllTasks: _getAllTasks,
+    getAllParticipants: _getAllParticipants,
+    getAllEmployers: _getAllEmployers,
     getCurrentUser: _getCurrentUser,
-    deleteList: _deleteList,
-    deleteTask: _deleteTask,
+    deleteParticipant: _deleteParticipant,
+    deleteEmployer: _deleteEmployer,
   };
 };

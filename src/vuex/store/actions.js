@@ -16,11 +16,11 @@ export default {
         console.log("finally");
       });
   },
-  [actionTypes.FETCH_LISTS]({ commit, state }) {
+  [actionTypes.FETCH_PARTICIPANTS]({ commit, state }) {
     mainDbApi(state.auth.token)
-      .getAllLists()
+      .getAllParticipants()
       .then((result) => {
-        commit(mutationTypes.SET_LISTS, result.data);
+        commit(mutationTypes.SET_PARTICIPANTS, result.data);
       })
       .catch((error) => {
         console.log(error);
@@ -30,11 +30,11 @@ export default {
         console.log("finally");
       });
   },
-  [actionTypes.FETCH_TASKS]({ commit, state }) {
+  [actionTypes.FETCH_EMPLOYERS]({ commit, state }) {
     mainDbApi(state.auth.token)
-      .getAllTasks()
+      .getAllEmployers()
       .then((result) => {
-        commit(mutationTypes.SET_TASKS, result.data);
+        commit(mutationTypes.SET_EMPLOYERS, result.data);
       })
       .catch((error) => {
         console.log(error);
@@ -58,11 +58,11 @@ export default {
         console.log("finally");
       });
   },
-  [actionTypes.DELETE_LIST]({ dispatch, state }, data) {
+  [actionTypes.DELETE_PARTICIPANT]({ dispatch, state }, data) {
     mainDbApi(state.auth.token)
-      .deleteList(data)
+      .deleteParticipant(data)
       .then(() => {
-        dispatch(actionTypes.FETCH_LISTS);
+        dispatch(actionTypes.FETCH_PARTICIPANTS);
       })
       .catch((error) => {
         console.log(error);
@@ -72,11 +72,11 @@ export default {
         console.log("finally");
       });
   },
-  [actionTypes.DELETE_TASK]({ dispatch, state }, data) {
+  [actionTypes.DELETE_EMPLOYER]({ dispatch, state }, data) {
     mainDbApi(state.auth.token)
-      .deleteTask(data)
+      .deleteEmployer(data)
       .then(() => {
-        dispatch(actionTypes.FETCH_TASKS);
+        dispatch(actionTypes.FETCH_EMPLOYERS);
       })
       .catch((error) => {
         console.log(error);

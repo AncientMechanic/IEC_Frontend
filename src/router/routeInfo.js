@@ -4,8 +4,8 @@ import HomeView from "../views/Home.vue";
 import LoginView from "../views/Login.vue";
 import RegisterView from "../views/Register.vue";
 import UsersView from "../views/Users.vue";
-import ListsView from "../views/Lists.vue";
-import TasksView from "../views/Tasks.vue";
+import ParticipantsView from "../views/Participants.vue";
+import EmployersView from "../views/Employers.vue";
 import UserView from "../views/User.vue";
 
 export default {
@@ -34,15 +34,15 @@ export default {
     name: "Users",
     component: UsersView,
   },
-  Lists: {
-    path: "/lists",
-    name: "Lists",
-    component: ListsView,
+  Participants: {
+    path: "/participants",
+    name: "Participants",
+    component: ParticipantsView,
   },
-  Tasks: {
-    path: "/tasks",
-    name: "Tasks",
-    component: TasksView,
+  Employers: {
+    path: "/employers",
+    name: "Employers",
+    component: EmployersView,
   },
   NotFound: {
     path: "/:catchAll(.*)",

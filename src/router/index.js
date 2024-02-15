@@ -49,17 +49,17 @@ const routes = [
     },
   },
   {
-    path: routeInfo.Lists.path,
-    name: routeInfo.Lists.name,
-    component: () => routeInfo.Lists.component,
+    path: routeInfo.Participants.path,
+    name: routeInfo.Participants.name,
+    component: () => routeInfo.Participants.component,
     meta: {
       middleware: [authorized],
     },
   },
   {
-    path: routeInfo.Tasks.path,
-    name: routeInfo.Tasks.name,
-    component: () => routeInfo.Tasks.component,
+    path: routeInfo.Employers.path,
+    name: routeInfo.Employers.name,
+    component: () => routeInfo.Employers.component,
     meta: {
       middleware: [authorized],
     },

@@ -5,10 +5,10 @@
       <router-link to="/users">Users</router-link>
     </div>
     <div>
-      <router-link to="/lists">Lists</router-link>
+      <router-link to="/participants">Participants</router-link>
     </div>
     <div>
-      <router-link to="/tasks">Tasks</router-link>
+      <router-link to="/employers">Employers</router-link>
     </div>
   </div>
 </template>
