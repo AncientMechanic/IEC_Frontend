@@ -3,6 +3,8 @@ const state = {
   participants: [],
   employers: [],
   currentUser: {},
+  currentParticipant: {},
+  currentEmployer: {},
 };
 
 export default state;

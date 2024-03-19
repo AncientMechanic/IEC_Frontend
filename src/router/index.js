@@ -72,6 +72,30 @@ const routes = [
       middleware: [authorized],
     },
   },
+  {
+    path: routeInfo.CurrentParticipant.path,
+    name: routeInfo.CurrentParticipant.name,
+    component: () => routeInfo.CurrentParticipant.component,
+    meta: {
+      middleware: [authorized],
+    },
+  },
+  {
+    path: routeInfo.CurrentEmployer.path,
+    name: routeInfo.CurrentEmployer.name,
+    component: () => routeInfo.CurrentEmployer.component,
+    meta: {
+      middleware: [authorized],
+    },
+  },
+  {
+    path: routeInfo.Query.path,
+    name: routeInfo.Query.name,
+    component: () => routeInfo.Query.component,
+    meta: {
+      middleware: [authorized],
+    },
+  },
 ];
 
 const router = createRouter({

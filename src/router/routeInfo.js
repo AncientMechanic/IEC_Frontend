@@ -7,6 +7,9 @@ import UsersView from "../views/Users.vue";
 import ParticipantsView from "../views/Participants.vue";
 import EmployersView from "../views/Employers.vue";
 import UserView from "../views/User.vue";
+import CurrentParticipantView from "../views/CurrentParticipant.vue";
+import CurrentEmployerView from "../views/CurrentEmployer.vue";
+import QueryView from "../views/Query.vue";
 
 export default {
   Start: {
@@ -38,6 +41,7 @@ export default {
     path: "/participants",
     name: "Participants",
     component: ParticipantsView,
+    props: (route) => ({ filteredParticipants: route.params.filteredParticipants })
   },
   Employers: {
     path: "/employers",
@@ -53,5 +57,20 @@ export default {
     path: "/user/:id",
     name: "User",
     component: UserView,
+  },
+  CurrentParticipant: {
+    path: "/participant/:id",
+    name: "CurrentParticipant",
+    component: CurrentParticipantView,
+  },
+  CurrentEmployer: {
+    path: "/employer/:id",
+    name: "CurrentEmployer",
+    component: CurrentEmployerView,
+  },
+  Query: {
+    path: "/query",
+    name: "Query",
+    component: QueryView,
   },
 };

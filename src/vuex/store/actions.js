@@ -58,6 +58,34 @@ export default {
         console.log("finally");
       });
   },
+  [actionTypes.FETCH_CURRENT_PARTICIPANT]({ commit, state }, data) {
+    mainDbApi(state.auth.token)
+      .getCurrentParticipant(data)
+      .then((result) => {
+        commit(mutationTypes.SET_CURRENT_PARTICIPANT, result.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  },
+  [actionTypes.FETCH_CURRENT_EMPLOYER]({ commit, state }, data) {
+    mainDbApi(state.auth.token)
+      .getCurrentEmployer(data)
+      .then((result) => {
+        commit(mutationTypes.SET_CURRENT_EMPLOYER, result.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  },
   [actionTypes.DELETE_PARTICIPANT]({ dispatch, state }, data) {
     mainDbApi(state.auth.token)
       .deleteParticipant(data)
@@ -86,4 +114,60 @@ export default {
         console.log("finally");
       });
   },
+  [actionTypes.CREATE_PARTICIPANT]({ dispatch, state }, participantData) {
+    mainDbApi(state.auth.token)
+      .postParticipant(participantData)
+      .then(() => {
+        dispatch(actionTypes.FETCH_PARTICIPANTS);
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  },
+  [actionTypes.UPDATE_PARTICIPANT]({ dispatch, state }, participantData) {
+    mainDbApi(state.auth.token)
+      .putParticipant(participantData.id, participantData.data)
+      .then(() => {
+        dispatch(actionTypes.FETCH_PARTICIPANTS);
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  },
+  [actionTypes.CREATE_EMPLOYER]({ dispatch, state }, employerData) {
+    mainDbApi(state.auth.token)
+      .postEmployer(employerData)
+      .then(() => {
+        dispatch(actionTypes.FETCH_EMPLOYERS);
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  },
+  [actionTypes.UPDATE_EMPLOYER]({ dispatch, state }, employerData) {
+    mainDbApi(state.auth.token)
+      .putEmployer(employerData.id, employerData.data)
+      .then(() => {
+        dispatch(actionTypes.FETCH_EMPLOYERS);
+      })
+      .catch((error) => {
+        console.log(error);
+        throw error;
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }
 };

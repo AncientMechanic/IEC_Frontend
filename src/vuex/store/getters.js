@@ -12,4 +12,10 @@ export default {
   [getterTypes.GET_CURRENT_USER]: (state) => {
     return state.currentUser;
   },
+  [getterTypes.GET_CURRENT_PARTICIPANT]: (state) => {
+    return state.currentParicipant;
+  },
+  [getterTypes.GET_CURRENT_EMPLOYER]: (state) => {
+    return state.currentEmployer;
+  },
 };
