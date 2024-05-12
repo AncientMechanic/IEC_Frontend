@@ -1,54 +1,80 @@
 <template>
-  <div>
-    <header class="auth-header">
-      <h1 class="auth-title">International Exchange Center</h1>
-      <nav class="auth-nav">
-        <router-link to="/register" class="auth-link">Register</router-link>
-        <router-link to="/login" class="auth-link">Login</router-link>
-      </nav>
-    </header>
-    <router-view />
+  <div class="container">
+    <div class="welcome-box">
+      <h1>Welcome</h1>
+      <div class="button-container">
+        <div>
+          <router-link to="/login" class="btn">LOGIN</router-link>
+        </div>
+        <div>
+          <router-link to="/register" class="btn">REGISTER</router-link>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "StartView",
-};
+  name: 'StartView',
+}
 </script>
 
 <style scoped>
-.auth-header {
+.container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  background-color: #0774e9; /* Синий цвет хэдера */
-  padding: 20px;
+  height: 100vh;
 }
 
-.auth-title {
-  color: #fff; /* Цвет текста в хэдере */
-  font-family: 'Roboto', sans-serif; /* Используемый шрифт */
-  font-size: 24px;
+.welcome-box {
+  width: 409px;
+  height: 412px;
+  background-color: #F6F8FA;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  text-align: center;
+  max-width: 400px; /* Устанавливаем максимальную ширину для формы */
+  width: 100%; /* Делаем форму адаптивной */
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #6196F5;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: bold;
   margin: 0;
 }
 
-.auth-nav {
+.button-container {
   display: flex;
+  flex-direction: column; /* Изменяем направление flex-контейнера на column */
+  align-items: center; /* Выравниваем кнопки по центру */
+  gap: 30px; /* Добавляем отступ между кнопками */
+  margin-top: 50px; /* Добавляем отступ сверху для контейнера с кнопками */
 }
 
-.auth-link {
-  margin-left: 10px;
-  padding: 10px 20px;
-  background-color: #0252a8;
+.btn {
+  background-color: #6196F5;
   color: #fff;
-  font-family: 'Roboto', sans-serif; /* Используемый шрифт */
-  text-decoration: none;
-  border-radius: 5px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 12px 24px;
+  border-radius: 4px;
   transition: background-color 0.3s ease;
+  width: 201px; /* Устанавливаем одинаковую ширину для обеих кнопок */
+  height: 59px; /* Устанавливаем одинаковую высоту для обеих кнопок */
+  display: flex; /* Добавляем flex-контейнер для выравнивания текста внутри кнопки */
+  justify-content: center; /* Выравниваем текст по горизонтали */
+  align-items: center; /* Выравниваем текст по вертикали */
 }
 
-.auth-link:hover {
-  background-color: #0056b3;
+
+.btn:hover {
+  background-color: #376acf;
 }
 </style>

@@ -11,7 +11,7 @@ export default {
       .then((result) => {
         commit(mutationTypes.SET_AUTH_TOKEN, result.data.token);
         Cookies.set('userId', result.data.userId);
-        router.push({ path: routeInfo.Home.path, name: routeInfo.Home.name });
+        router.push({ path: routeInfo.Participants.path, name: routeInfo.Participants.name });
       })
       .catch((error) => {
         console.log(error);

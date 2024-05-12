@@ -7,12 +7,26 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "IEC-primary": "#007bff",
-        "IEC-secondary": "",
+        "IEC-primary": "#F6F8FA",
+        "IEC-secondary": "#6196F5",
+        "IEC-background": "#DBE0EB",
+        "IEC-text": "#354770",
       }
     },
     fontFamily: {
-      GolosText: ["Golos Text, sans-serif"],
+      Montserrat: ["Montserrat, sans-serif"],
+    },
+    container: {
+      center: true,
+      padding: "2rem",
+    },
+    screens: {
+      "2xl": "1536px",
+      xl: "1280px",
+      lg: "1024px",
+      md: "768px",
+      sm: "640px",
+      xs: "480px",
     }
   },
   plugins: [],

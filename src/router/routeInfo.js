@@ -17,11 +17,7 @@ export default {
     name: "StartView",
     component: StartView,
   },
-  Home: {
-    path: "/home",
-    name: "HomeView",
-    component: HomeView,
-  },
+
   Login: {
     path: "/login",
     name: "LoginView",

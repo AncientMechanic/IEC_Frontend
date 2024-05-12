@@ -1,24 +1,60 @@
 <template>
-  <div>
-    <form class="login" @submit.prevent="login">
-      <h1>Sign in</h1>
-      <label>Email</label>
-      <input v-model="email" required type="email" placeholder="Name" />
-      <label>Password</label>
-      <input
-        v-model="password"
-        required
-        type="password"
-        placeholder="Password"
-      />
-      <hr />
-      <button type="submit">Login</button>
-    </form>
+  <div class="login-container font-Montserrat">
+    <div class="login-form">
+      <router-link to="/" class="back-link">
+        <img src="src\assets\Arrow.png" alt="Back" class="back-arrow" />
+      </router-link>
+      <div class="logo-container">
+        <img src="src\assets\User2.png" alt="Logo" class="logo" />
+      </div>
+      <h2 class="form-title">Sign in</h2>
+      <form @submit.prevent="login">
+        <div class="form-group">
+          <div class="input-label">Email</div>
+          <div class="input-group">
+            <input
+              id="email"
+              v-model="email"
+              :type="showEmail ? 'text' : 'password'"
+              required
+              :class="{ 'input-error': authError }"
+
+            />
+            <span class="toggle-visibility" @click="toggleEmailVisibility">
+              <i :class="showEmail ? 'fa fa-eye-slash' : 'fa fa-eye'" aria-hidden="true"></i>
+            </span>
+          </div>
+          <div class="error-message" v-if="emailError">{{ emailError }}</div>
+        </div>
+        <div class="form-group">
+          <div class="input-label">Password</div>
+          <div class="input-group">
+            <input
+              id="password"
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              required
+              :class="{ 'input-error': authError }"
+            />
+            <span class="toggle-visibility" @click="togglePasswordVisibility">
+              <i :class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'" aria-hidden="true"></i>
+            </span>
+          </div>
+          <div class="error-message" v-if="passwordError">{{ passwordError }}</div>
+        </div>
+        <div class="form-actions">
+          <span class="forgot-password" @click="showMessage">Forgot password?</span>
+          <button type="submit" class="btn-login">LOGIN</button>
+        </div>
+      </form>
+      <div class="message" v-if="showMessageFlag">Please reach out to Your superviser to retrieve Your access data</div>
+    </div>
   </div>
 </template>
 
 <script>
 import { actions as authActionTypes } from "../vuex/modules/auth/types";
+import Cookies from 'js-cookie';
 
 export default {
   name: "LoginView",
@@ -26,14 +62,248 @@ export default {
     return {
       email: "",
       password: "",
+      showMessageFlag: false,
+      showEmail: false,
+      showPassword: false,
+      messageTimeout: null, // Добавляем свойство для хранения таймера
+      emailError: "",
+      passwordError: "",
+      authError: false,
+      userId: "",
     };
   },
   methods: {
     login() {
+      this.clearErrors();
       const email = this.email;
       const password = this.password;
-      this.$store.dispatch(authActionTypes.AUTH_REQUEST, { email, password });
+
+      // Здесь вы можете добавить логику для проверки данных
+      // и установки ошибок в случае неправильного ввода
+      /*if (!this.validateEmail(email)) {
+        this.emailError = "Invalid email format";
+      }
+      if (!this.validatePassword(password)) {
+        this.passwordError = "Password must be at least 8 characters long";
+      }*/
+
+      // Если нет ошибок, отправляем данные на сервер
+      if (!this.emailError && !this.passwordError) {
+        this.$store.dispatch(authActionTypes.AUTH_REQUEST, { email, password })
+        .then((response) => {
+          // Успешная авторизация
+          console.log('Авторизация прошла успешно.');
+        })
+        .catch((error) => {
+          // Ошибка авторизации
+          console.error('Произошла ошибка во время авторизации:', error);
+        });
+      }
+    },
+    clearErrors() {
+      this.emailError = "";
+      this.passwordError = "";
+    },
+    loginError() {
+      
+    },
+    /*validateEmail(email) {
+      // Здесь вы можете добавить свою логику для проверки email
+      const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      return emailRegex.test(email);
+    },
+    validatePassword(password) {
+      // Здесь вы можете добавить свою логику для проверки пароля
+      return password.length >= 8;
+    },*/
+    showMessage() {
+      if (this.showMessageFlag) {
+        // Если сообщение уже отображается, скрываем его
+        this.hideMessage();
+      } else {
+        // Если сообщение не отображается, показываем его
+        this.showMessageFlag = true;
+        setTimeout(() => {
+          this.$nextTick(() => {
+            const messageElement = this.$el.querySelector(".message");
+            messageElement.classList.add("show");
+          });
+        }, 0);
+        this.messageTimeout = setTimeout(() => {
+          this.hideMessage();
+        }, 10000);
+      }
+    },
+    hideMessage() {
+      this.showMessageFlag = false;
+      this.$nextTick(() => {
+        const messageElement = this.$el.querySelector(".message");
+        messageElement.classList.remove("show");
+      });
+      clearTimeout(this.messageTimeout); // Очищаем таймер
+    },
+    toggleEmailVisibility() {
+      this.showEmail = !this.showEmail;
+    },
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
     },
   },
 };
 </script>
+
+<style scoped>
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form {
+  background-color: #F6F8FA;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  text-align: center;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+  z-index: 1; /* Добавляем z-index для формы */
+  position: relative; /* Добавляем position: relative для формы */
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+
+}
+
+.logo {
+  max-width: 57px;
+}
+
+.form-title {
+  color: #6196F5;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 44px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.btn-login {
+  background-color: #6196F5;
+  color: #FBFBFB;
+  font-weight: 450;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  width: 133px; /* Устанавливаем одинаковую ширину для обеих кнопок */
+  height: 40px;
+}
+
+.btn-login:hover {
+  background-color: #376acf;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.forgot-password {
+  color: #888;
+  cursor: pointer;
+}
+
+.message {
+  background-color: #F6F8FA;
+  color: #888;
+  padding: 10px;
+  border-radius: 0px 0px 15px 15px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-0%);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: -2;
+}
+
+.message.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(5px);
+  
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.input-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  margin: 2px 0 5px 0;
+  color: #888;
+}
+
+input {
+  width: 100%;
+  padding: 10px 30px 10px 10px;
+  border: 0px solid #ccc;
+  border-radius: 7px;
+  box-shadow: 0 0px 10px rgba(1, 1, 1, 0.167);
+  outline: none;
+}
+
+input:focus {
+  outline: 2px solid #6196F5; /* Задаем новый контур при фокусе */
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #888;
+}
+
+.back-link {
+  margin-left: -170px;
+  position: absolute;
+  text-decoration: none;
+}
+
+.back-arrow {
+  width: 24px;
+  height: 24px;
+}
+
+.login-form input.input-error {
+  border-color: #ff6347;
+}
+
+.error-message {
+  color: #ff6347; /* Красноватый цвет */
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+</style>

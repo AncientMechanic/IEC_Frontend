@@ -12,14 +12,6 @@ const routes = [
     component: () => routeInfo.Start.component,
   },
   {
-    path: routeInfo.Home.path,
-    name: routeInfo.Home.name,
-    component: () => routeInfo.Home.component,
-    meta: {
-      middleware: [authorized],
-    },
-  },
-  {
     path: routeInfo.Login.path,
     name: routeInfo.Login.name,
     component: () => routeInfo.Login.component,

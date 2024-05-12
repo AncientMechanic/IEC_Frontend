@@ -1,32 +1,72 @@
 <template>
-  <div>
-    <h4>Register</h4>
-    <form @submit.prevent="register">
-      <label for="name">Name</label>
-      <div>
-        <input id="name" v-model="name" type="text" required autofocus />
+  <div class="register-container font-Montserrat">
+    <div class="register-form">
+      <router-link to="/" class="back-link">
+        <img src="src\assets\Arrow.png" alt="Back" class="back-arrow" />
+      </router-link>
+      <div class="logo-container">
+        <img src="src\assets\User2.png" alt="Logo" class="logo" />
       </div>
-      <label for="email">E-Mail Address</label>
-      <div>
-        <input id="email" v-model="email" type="email" required />
-      </div>
-      <label for="password">Password</label>
-      <div>
-        <input id="password" v-model="password" type="password" required />
-      </div>
-      <label for="password-confirm">Confirm Password</label>
-      <div>
-        <input
-          id="password-confirm"
-          v-model="password_confirmation"
-          type="password"
-          required
-        />
-      </div>
-      <div>
-        <button type="submit">Register</button>
-      </div>
-    </form>
+      <h2 class="form-title">Register</h2>
+      <form @submit.prevent="register">
+        <div class="form-group">
+          <div class="input-label">Name</div>
+          <div class="input-group">
+            <input
+              id="name"
+              v-model="name"
+              type="text"
+              required
+              autofocus
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-label">Email</div>
+          <div class="input-group">
+            <input
+              id="email"
+              v-model="email"
+              type="email"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-label">Password</div>
+          <div class="input-group">
+            <input
+              id="password"
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              required
+            />
+            <span class="toggle-visibility" @click="togglePasswordVisibility">
+              <i :class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'" aria-hidden="true"></i>
+            </span>
+          </div>
+          <div class="error-message" v-if="passwordLengthError">{{ passwordLengthError }}</div>
+        </div>
+        <div class="form-group">
+          <div class="input-label">Confirm Password</div>
+          <div class="input-group">
+            <input
+              id="password-confirm"
+              v-model="password_confirmation"
+              :type="showPasswordConfirm ? 'text' : 'password'"
+              required
+            />
+            <span class="toggle-visibility" @click="togglePasswordConfirmVisibility">
+              <i :class="showPasswordConfirm ? 'fa fa-eye-slash' : 'fa fa-eye'" aria-hidden="true"></i>
+            </span>
+          </div>
+          <div class="error-message" v-if="passwordMatchError">{{ passwordMatchError }}</div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-register">REGISTER</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -41,17 +81,167 @@ export default {
       email: "",
       password: "",
       password_confirmation: "",
-      is_admin: null,
+      showPassword: false,
+      showPasswordConfirm: false,
+      passwordMatchError: "", // Новое свойство
+      passwordLengthError: "", // Новое свойство
     };
   },
   methods: {
-    register: function () {
-      let data = {
-        email: this.email,
-        password: this.password,
-      };
-      this.$store.dispatch(authActionTypes.REGISTER, data);
+    register() {
+      const name = this.name;
+      const email = this.email;
+      const password = this.password;
+      const password_confirmation = this.password_confirmation;
+
+      if (password.length < 8) {
+        this.passwordLengthError = "Password must be at least 8 characters long";
+        return; // Выходим из метода, если пароль слишком короткий
+      }
+
+      // Если длина пароля достаточная, сбрасываем ошибку
+      this.passwordLengthError = "";
+
+      if (password !== password_confirmation) {
+        this.passwordMatchError = "Passwords do not match";
+        return; // Выходим из метода, если пароли не совпадают
+      }
+
+      // Если пароли совпадают, сбрасываем ошибку
+      this.passwordMatchError = "";
+
+      // Здесь вы можете добавить логику для проверки данных
+      // и отправки их на сервер
+
+      this.$store.dispatch(authActionTypes.REGISTER, {
+        name,
+        email,
+        password,
+        password_confirmation,
+      });
+    },
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
+    togglePasswordConfirmVisibility() {
+      this.showPasswordConfirm = !this.showPasswordConfirm;
     },
   },
 };
 </script>
+
+<style scoped>
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.register-form {
+  background-color: #f6f8fa;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  text-align: center;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+  z-index: 1;
+  position: relative;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  max-width: 57px;
+}
+
+.form-title {
+  color: #6196f5;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 44px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  margin: 2px 0 5px 0;
+  color: #888;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+input {
+  width: 100%;
+  padding: 10px 30px 10px 10px;
+  border: 0px solid #ccc;
+  border-radius: 7px;
+  box-shadow: 0 0px 10px rgba(1, 1, 1, 0.167);
+  outline: none;
+}
+
+input:focus {
+  outline: 2px solid #6196f5;
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #888;
+}
+
+.btn-register {
+  background-color: #6196f5;
+  color: #fbfbfb;
+  font-weight: 450;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  width: 133px;
+  height: 40px;
+}
+
+.btn-register:hover {
+  background-color: #376acf;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.back-link {
+  margin-left: -170px;
+  position: absolute;
+  text-decoration: none;
+}
+
+.back-arrow {
+  width: 24px;
+  height: 24px;
+}
+
+.error-message {
+  color: #ff6347;
+  font-size: 14px;
+  margin-top: 5px;
+}
+</style>
