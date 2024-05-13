@@ -154,13 +154,15 @@ export default {
 .content-wrapper {
   flex: 1;
   display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 150px;
 }
 
 .content {
-  /* Стили для контента */
-  max-width: 800px; /* Максимальная ширина контента */
-  padding-top: 0px;
+  width: 100%;
+  max-width: none;
+  padding: 20px
 }
 
 .logout-icon:hover {
