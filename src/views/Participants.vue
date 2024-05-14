@@ -44,7 +44,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(participant, index) in findParticipants" :key="participant.id">
+        <tr v-for="(participant, index) in paginatedParticipants" :key="participant.id">
           <div class="row-container">
             <td class="part-id">{{ participant.id.slice(0, 8) }}</td>
             <td>{{ participant.lastName }}</td>
@@ -60,6 +60,50 @@
         </tr>
       </tbody>
     </table>
+    <div class="pagination-controls">
+      <div class="pagination-container">
+        <div class="pagination">
+          <div class="pagination-button-prev">
+            <button :disabled="currentPage === 1" @click="currentPage--">
+              <img
+                :src="currentPage === 1 ? prevDisabledIcon : prevIcon"
+                alt="Previous"
+                class="pagination-icon"
+              />
+              <span>Prev</span>
+            </button>
+          </div>
+          <div class="page-numbers">
+          <span v-for="pageNumber in visiblePageNumbers" :key="pageNumber">
+            <button
+              v-if="typeof pageNumber === 'number'"
+              :class="{ active: currentPage === pageNumber }"
+              @click="currentPage = pageNumber"
+            >
+              {{ pageNumber }}
+            </button>
+            <span v-else class="ellipsis">{{ pageNumber }}</span>
+          </span>
+          </div>
+          <div class="pagination-button-next">
+            <button :disabled="currentPage === totalPages" @click="currentPage++">
+              <span>Next</span>
+              <img
+                :src="currentPage === totalPages ? nextDisabledIcon : nextIcon"
+                alt="Next"
+                class="pagination-icon"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="page-size-select">
+        <label for="page-size">Show:</label>
+        <select id="page-size" v-model="perPage" class="size-selector">
+          <option v-for="option in pageOptions" :key="option" :value="option">{{ option }}</option>
+        </select>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -77,7 +121,10 @@ export default {
     return {
       userId: Cookies.get('userId') || "", // Получаем userId из cookies
       searchQuery: "",
-    };
+      currentPage: 1, // Текущая страница
+      perPage: 5, // Количество строк на странице (по умолчанию 5)
+      pageOptions: [1, 2, 5], // Варианты количества строк на странице
+      };
   },
   computed: {
     displayedParticipants() {
@@ -103,7 +150,66 @@ export default {
     },
     user() {
       return Cookies.get('userId');
-    }
+    },
+    paginatedParticipants() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.findParticipants.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.findParticipants.length / this.perPage);
+    },
+    pageNumbers() {
+      const pageNumbers = [];
+      for (let i = 1; i <= this.totalPages; i++) {
+        pageNumbers.push(i);
+      }
+      return pageNumbers;
+    },
+    visiblePageNumbers() {
+      const visiblePageNumbers = [];
+      const maxVisiblePages = 5; // Максимальное количество видимых номеров страниц
+
+      // Определяем начальную и конечную страницы для отображения
+      let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+
+      // Если начальная страница слишком близко к первой странице
+      if (startPage <= maxVisiblePages - 2) {
+        startPage = 1;
+        endPage = Math.min(this.totalPages, maxVisiblePages);
+      }
+
+      // Если конечная страница слишком близко к последней странице
+      if (endPage >= this.totalPages - maxVisiblePages + 3) {
+        endPage = this.totalPages;
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+
+      // Добавляем номера страниц в диапазоне от начальной до конечной страницы
+      for (let i = startPage; i <= endPage; i++) {
+        visiblePageNumbers.push(i);
+      }
+
+      // Если есть предыдущие страницы, добавляем три точки и номер первой страницы
+      if (startPage > 1) {
+        visiblePageNumbers.unshift('...');
+        visiblePageNumbers.unshift(1);
+      }
+
+      // Если есть следующие страницы, добавляем три точки и номер последней страницы
+      if (endPage < this.totalPages) {
+        visiblePageNumbers.push('...');
+        visiblePageNumbers.push(this.totalPages);
+      }
+
+      return visiblePageNumbers;
+    },
+  },
+  watch: {
+    perPage() {
+      this.currentPage = 1; // Сбросить текущую страницу на первую при изменении количества строк
+    },
   },
   beforeCreate() {
     this.$store.dispatch(mainActionTypes.FETCH_PARTICIPANTS);
@@ -154,12 +260,25 @@ export default {
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed; /* Фиксированная ширина столбцов */
 }
 
 th, td {
   padding: 10px;
   text-align: left;
+  white-space: nowrap; /* Запрещает перенос текста на новую строку */
+  overflow: hidden; /* Скрывает выходящий за пределы текст */
+  text-overflow: ellipsis; /* Добавляет многоточие для обрезанного текста */
 }
+
+th:nth-child(1) { width: 10%; } /* Ширина первого столбца (ID) */
+th:nth-child(2) { width: 20%; } /* Ширина второго столбца (Last name) */
+th:nth-child(3) { width: 15%; } /* Ширина третьего столбца (First Name) */
+th:nth-child(4) { width: 15%; } /* Ширина четвертого столбца (Patronymic) */
+th:nth-child(5) { width: 15%; } /* Ширина пятого столбца (Date of birth) */
+th:nth-child(6) { width: 10%; } /* Ширина шестого столбца (Season) */
+th:nth-child(7) { width: 10%; } /* Ширина седьмого столбца (Program) */
+th:nth-child(8) { width: 5%; } /* Ширина восьмого столбца (Кнопка) */
 
 .search-container {
   display: flex;
@@ -171,6 +290,8 @@ th, td {
   max-width: 659px;
   max-height: 46px;
   box-shadow: 0 0px 7px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .search-icon {
@@ -368,6 +489,150 @@ th, td {
   content: url('../assets/Download.png');
 }
 
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.page-size-select {
+  display: flex;
+  align-items: center;
+}
+
+.size-selector {
+  width: 60px;
+  height: 30px;
+  background-color: #DBE0EB;
+  border: 2px solid #6196F5;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #6196F5;
+  padding-left: 5px;
+}
 
 
+.page-size-select label {
+  margin-right: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #6196F5;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-left: 80px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+}
+
+.page-numbers button {
+  width: 34px;
+  height: 34px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #6196F5;
+  margin-right: 10px;
+  border-radius: 8px;
+}
+
+.page-numbers button:hover {
+  background-color: #BCCFF5;
+}
+
+.page-numbers button.active {
+  background-color: #6196f5;
+  color: #fff;
+}
+
+.pagination-button-prev .pagination-icon{
+  width: 15px;
+  height: 20px;
+  margin-right: 15px;
+  content: url('../assets/Previous.png');
+}
+
+.pagination-button-next .pagination-icon{
+  width: 15px;
+  height: 20px;
+  margin-left: 15px;
+  content: url('../assets/Next.png');
+}
+
+.ellipsis {
+  color: #6196f5;
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 10px;
+  line-height: 1; /* Adjusted line-height */
+  vertical-align: middle; /* Ensures vertical alignment */
+  display: inline-flex; /* Makes alignment easier */
+  align-items: center; /* Centers content vertically */
+  margin-top: -3px; /* Adjusted margin-top to lower the position */
+}
+
+.pagination-button-prev,
+.pagination-button-next {
+  display: flex;
+  align-items: center;
+}
+
+.pagination-button-prev {
+  margin-right: 25px;
+}
+.pagination-button-next {
+  margin-left: 15px;
+}
+
+.pagination-button-prev button,
+.pagination-button-next button {
+  display: flex;
+  align-items: center;
+  background-color: #DBE0EB;
+  color: #6196f5;
+  border: none;
+  padding: 5px 0px;
+  cursor: pointer;
+  font-size: 19px;
+  font-weight: 450;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-button-prev button:hover,
+.pagination-button-next button:hover {
+  display: flex;
+  align-items: center;
+  background-color: #DBE0EB;
+  color: #2f74f6;
+  border: none;
+  padding: 4px 0px;
+  cursor: pointer;
+  font-size: 19px;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-button-prev button:disabled,
+.pagination-button-next button:disabled {
+  background-color: #DBE0EB;
+  color: #969696;
+  border: none;
+}
+
+.pagination-button-prev button:disabled .pagination-icon,
+.pagination-button-next button:disabled .pagination-icon {
+  filter: grayscale(100%);
+}
+
+.pagination-button-prev span,
+.pagination-button-next span {
+  margin-left: 8px;
+  margin-right: 8px;
+}
 </style>
