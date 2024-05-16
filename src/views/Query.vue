@@ -5,50 +5,57 @@
         <h2>Filters</h2>
         <ul>
           <li v-for="(condition, key) in conditions" :key="key" class="filter-item">
-            <span class="bullet"></span>
-            <span class="condition-label">{{ condition }}</span>
+            <label :for="key" class="condition-label">
+              <span class="bullet"></span>
+              {{ condition }}
+            </label>
             <input type="checkbox" :id="key" v-model="selectedConditions[key]" class="checkbox" />
           </li>
           <li class="filter-item">
-            <span class="bullet"></span>
-            <span class="condition-label">Service Plan:</span>
-            <div class="dropdown-container">
-              <select v-model="selectedServicePlan" id="servicePlan" class="dropdown">
-                <option value="FullService">Full Service</option>
-                <option value="SelfArranged">Self Arranged</option>
-                <option value="">None</option>
-              </select>
-            </div>
+            <label for="servicePlan" class="condition-label">
+              <span class="bullet"></span>
+              Service Plan:
+            </label>
+            <select v-model="selectedServicePlan" id="servicePlan" class="dropdown">
+              <option value="FullService">Full Service</option>
+              <option value="SelfArranged">Self Arranged</option>
+              <option value="">None</option>
+            </select>
           </li>
           <li class="filter-item">
-            <span class="bullet"></span>
-            <span class="condition-label">Program:</span>
-            <div class="dropdown-container">
-              <select v-model="selectedProgram" id="program" class="dropdown">
-                <option value="Work&TravelUSA">Work&Travel USA</option>
-                <option value="Australia">Australia</option>
-                <option value="Vietnam">Vietnam</option>
-                <option value="">None</option>
-              </select>
-            </div>
+            <label for="program" class="condition-label">
+              <span class="bullet"></span>
+              Program:
+            </label>
+            <select v-model="selectedProgram" id="program" class="dropdown">
+              <option value="Work&TravelUSA">Work&Travel USA</option>
+              <option value="Australia">Australia</option>
+              <option value="Vietnam">Vietnam</option>
+              <option value="">None</option>
+            </select>
           </li>
-      </ul>
+        </ul>
       </div>
       <div class="query-container">
         <h2>Query</h2>
         <textarea :value="getQuery" readonly class="query-textarea"></textarea>
       </div>
     </div>
-    <div class="filter-type-container">
-      <label for="filterType">Filter:</label>
-      <select v-model="filterType" id="filterType">
-        <option value="isOn">is on</option>
-        <option value="isNotOn">is not on</option>
-      </select>
-    </div>
-    <div class="button-container">
-      <button @click="applyFilters">Apply</button>
-      <router-link to="/participants">Cancel</router-link>
+    <div class="filter-and-buttons">
+      <div class="filter-type-container">
+        <label for="filterType">Condition:</label>
+        <select v-model="filterType" id="filterType" class="condition-selector">
+          <option value="isOn">is on</option>
+          <option value="isNotOn">is not on</option>
+        </select>
+      </div>
+      <div class="button-container">
+        <router-link :to="{ name: 'Participants' }" class="cancel-btn">
+          <span>Cancel</span>
+          <img src="src\assets\Cancel.png" alt="Cancel Icon" class="cancel-icon" />
+        </router-link>
+        <button @click="applyFilters" class="apply-btn">Apply</button>
+      </div>
     </div>
   </div>
 </template>
@@ -143,14 +150,18 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .filters-container {
-  width: 30%;
+  width: 100%;
+  max-width: 30%;
   height: 550px;
   padding: 20px;
   background-color: #F6F8FA;
-  border-radius: 8px;
+  border-radius: 15px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 7px rgba(96, 96, 96, 0.35);
 }
 
 .filters-container h2 {
@@ -158,8 +169,8 @@ export default {
   font-family: 'Montserrat', sans-serif;
   font-size: 27px;
   font-weight: 550;
-  
   margin-bottom: 15px;
+  margin-left: 7px;
 }
 
 .filters-container ul {
@@ -179,7 +190,6 @@ export default {
   background-color: #354770;
   border-radius: 50%;
   margin-right: 15px;
-  margin-left: 5px;
 }
 
 .filter-item {
@@ -187,38 +197,99 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  margin-left: 10px;
+  width: 100%;
 }
 
 .condition-label {
-  flex-grow: 1;
+  display: flex;
+  align-items: center;
   font-size: 18px;
   color: #354770;
+  width: calc(100% - 220px); /* Adjust this value according to the width of the dropdown/checkbox */
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .checkbox {
-  width: 18px;
-  height: 18px;
-  margin-right: 120px;
-  margin-left: 100px;
-  border-radius: 1px;
-  border: #354770 1px solid;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #354770;
+  background-color: #ffffff;
+  border-radius: 4px;
+  position: relative;
+  margin-left: 10px;
+  margin-right: 100px;
+  cursor: pointer;
+}
+
+.checkbox::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 13px;
+  height: 13px;
+  background-color: #354770;
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.checkbox:checked::before {
+  opacity: 1;
 }
 
 .dropdown {
   width: 180px;
   height: 26px;
-  margin-right: 40px;
-  margin-left: 50px;
   border: #354770 solid 2px;
+  background-color: #ffffff;
   border-radius: 5px;
   color: #354770;
+  margin-right: 20px;
+}
+
+.dropdown:hover {
+  border: #6196F5 solid 2px;
+}
+
+select {
+  background-color: #F6F8FA;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+select option {
+  background-color: #F6F8FA;
+  color: #354770;
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+.dropdown:focus, .query-textarea:focus, .condition-selector:focus{
+  outline: none; /* Убирает стандартный outline */
 }
 
 .query-container {
-  width: 68%;
+  width: 100%;
+  max-width: 68%;
   padding: 20px;
   background-color: #F6F8FA;
-  border-radius: 8px;
+  border-radius: 15px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 7px rgba(96, 96, 96, 0.35);
 }
 
 .query-container h2 {
@@ -226,13 +297,13 @@ export default {
   font-family: 'Montserrat', sans-serif;
   font-size: 27px;
   font-weight: 550;
-  
   margin-bottom: 15px;
+  margin-left: 7px;
 }
 
 .query-textarea {
   width: 100%;
-  height: 200px;
+  height: 400px;
   resize: none;
   padding: 10px;
   font-family: monospace;
@@ -242,34 +313,95 @@ export default {
   font-family: Montserrat;
   font-size: 18px;
   color: #354770;
+  cursor: auto;
+}
+
+.filter-and-buttons {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: flex-end;
 }
 
 .filter-type-container {
-  margin-bottom: 20px;
+  margin-right: 50px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.condition-selector {
+  margin-left: 20px;
+  font-weight: normal;
+  width: 180px;
+  height: 26px;
+  border: #354770 solid 2px;
+  border-radius: 5px;
+  color: #354770;
+  background-color: #ffffff;
+}
+
+.condition-selector:hover {
+  border: #6196F5 solid 2px;
 }
 
 .button-container {
   display: flex;
+  align-items: center;
 }
 
-.button-container button,
-.button-container a {
-  padding: 10px 20px;
-  margin-right: 10px;
-  border-radius: 4px;
+.cancel-btn {
+  width: 130px;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  background-color: #DBE0EB;
+  color: #FF4343;
+  border: 2px solid #FF4343;
+  padding: 8px 20px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+  margin-right: 30px;
 }
 
-.button-container button {
-  background-color: #6196f5;
-  color: #fff;
-  border: none;
+.cancel-btn:hover {
+  background-color: #FF4343;
+  color: #F6F8FA;
+  border: 2px solid #FF4343;
 }
 
-.button-container a {
-  background-color: #f5f5f5;
-  color: #333;
-  text-decoration: none;
-  border: 1px solid #ccc;
+.cancel-btn:hover .icon {
+  content: url('../assets/Cancel_white.png');
+}
+
+.cancel-icon {
+  width: 19px;
+  height: 19px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.cancel-btn:hover .cancel-icon{
+  content: url('../assets/Cancel_white.png');
+}
+
+.apply-btn {
+  width: 150px;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  background-color: #6196F5;
+  color: #F6F8FA;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+.apply-btn:hover {
+  background-color: #3773e2;
+  color: #F6F8FA;
 }
 </style>

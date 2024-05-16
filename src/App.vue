@@ -73,7 +73,7 @@ export default {
   top: 0; /* Позиционируем хэдер вверху */
   left: 0;
   right: 0;
-  z-index: 1; /* Устанавливаем z-index выше, чем у основного контента */
+  z-index: 2; /* Устанавливаем z-index выше, чем у основного контента */
   width: 100%;
   display: flex;
   height: 100px;

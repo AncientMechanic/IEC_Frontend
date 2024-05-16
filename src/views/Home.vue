@@ -62,7 +62,7 @@ export default {
   height: 50px;
   left: 0;
   right: 0;
-  z-index: 0; /* Устанавливаем z-index ниже, чем у хэдера */
+  z-index: 1; /* Устанавливаем z-index ниже, чем у хэдера */
 }
 
 .nav-buttons {

@@ -53,7 +53,7 @@
             <td>{{ formatDate(participant.dateOfBirth) }}</td>
             <td>{{ participant.season }}</td>
             <td>{{ participant.program }}</td>
-            <td>
+            <td class="open-btn-cell">
               <button class="open-btn" @click="openParticipant(participant.id)">Open</button>
             </td>
           </div>
@@ -148,9 +148,6 @@ export default {
       participantsToDisplay.sort((a, b) => a.lastName.localeCompare(b.lastName));
       return participantsToDisplay;
     },
-    user() {
-      return Cookies.get('userId');
-    },
     paginatedParticipants() {
       const start = (this.currentPage - 1) * this.perPage;
       const end = start + this.perPage;
@@ -168,36 +165,30 @@ export default {
     },
     visiblePageNumbers() {
       const visiblePageNumbers = [];
-      const maxVisiblePages = 5; // Максимальное количество видимых номеров страниц
+      const maxVisiblePages = 5;
 
-      // Определяем начальную и конечную страницы для отображения
       let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
       let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
 
-      // Если начальная страница слишком близко к первой странице
       if (startPage <= maxVisiblePages - 2) {
         startPage = 1;
         endPage = Math.min(this.totalPages, maxVisiblePages);
       }
 
-      // Если конечная страница слишком близко к последней странице
       if (endPage >= this.totalPages - maxVisiblePages + 3) {
         endPage = this.totalPages;
         startPage = Math.max(1, endPage - maxVisiblePages + 1);
       }
 
-      // Добавляем номера страниц в диапазоне от начальной до конечной страницы
       for (let i = startPage; i <= endPage; i++) {
         visiblePageNumbers.push(i);
       }
 
-      // Если есть предыдущие страницы, добавляем три точки и номер первой страницы
       if (startPage > 1) {
         visiblePageNumbers.unshift('...');
         visiblePageNumbers.unshift(1);
       }
 
-      // Если есть следующие страницы, добавляем три точки и номер последней страницы
       if (endPage < this.totalPages) {
         visiblePageNumbers.push('...');
         visiblePageNumbers.push(this.totalPages);
@@ -207,8 +198,11 @@ export default {
     },
   },
   watch: {
+    searchQuery() {
+      this.currentPage = 1; // Reset to the first page when search query changes
+    },
     perPage() {
-      this.currentPage = 1; // Сбросить текущую страницу на первую при изменении количества строк
+      this.currentPage = 1; // Reset to the first page when items per page changes
     },
   },
   beforeCreate() {
@@ -346,6 +340,13 @@ th:nth-child(8) { width: 5%; } /* Ширина восьмого столбца (
   padding: 10px;
   height: 50px;
   margin-bottom: 10px;
+  
+}
+
+.open-btn-cell {
+  display: flex;
+  justify-content: flex-end; /* Выравнивание кнопки "Open" по правому краю */
+  margin-right: -12px;
 }
 
 .row-container td {
@@ -442,7 +443,6 @@ th:nth-child(8) { width: 5%; } /* Ширина восьмого столбца (
   background-color: #6196F5;
   color: #F6F8FA;
   border: 2px solid #6196F5;
-  background-image: url('../assets/Plus_light.png'); /* Путь к картинке при наведении */
 }
 .icon-btn-add:hover .icon {
   content: url('../assets/Plus.png');
@@ -452,7 +452,6 @@ th:nth-child(8) { width: 5%; } /* Ширина восьмого столбца (
   background-color: #6196F5;
   color: #F6F8FA;
   border: 2px solid #6196F5;
-  background-image: url('../assets/Plus_light.png'); /* Путь к картинке при наведении */
 }
 .icon-btn-filt:hover .icon {
   content: url('../assets/Filter_white.png');
@@ -462,7 +461,6 @@ th:nth-child(8) { width: 5%; } /* Ширина восьмого столбца (
   background-color: #6196F5;
   color: #F6F8FA;
   border: 2px solid #6196F5;
-  background-image: url('../assets/Plus_light.png'); /* Путь к картинке при наведении */
 }
 .icon-btn-dnld:hover .icon {
   content: url('../assets/Download_white.png');
@@ -472,21 +470,21 @@ th:nth-child(8) { width: 5%; } /* Ширина восьмого столбца (
   width: 24px;
   height: 24px;
   margin-left: 20px;
-  content: url('../assets/Plus_dark.png');
+  
 }
 
 .icon-btn-filt .icon {
   width: 24px;
   height: 24px;
   margin-left: 20px;
-  content: url('../assets/Filter.png');
+
 }
 
 .icon-btn-dnld .icon {
   width: 24px;
   height: 24px;
   margin-left: 20px;
-  content: url('../assets/Download.png');
+ 
 }
 
 .pagination-controls {
