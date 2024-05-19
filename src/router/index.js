@@ -99,7 +99,8 @@ router.beforeEach((to, from, next) => {
   if (!to.meta.middleware) {
     return next();
   }
-
+  
+  window.scrollTo(0, 0);
   const middleware = to.meta.middleware;
 
   const context = {

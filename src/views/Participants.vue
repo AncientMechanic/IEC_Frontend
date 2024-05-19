@@ -224,16 +224,6 @@ export default {
       XLSX.utils.book_append_sheet(workbook, worksheet, "Участники");
       XLSX.writeFile(workbook, "участники.xlsx");
     },
-    confirmDeleteParticipant(id) {
-    if (confirm("Вы уверены, что хотите удалить этого участника?")) {
-      this.deleteParticipant(id);
-    } else {
-      console.log("Удаление отменено");
-    }
-  },
-    deleteParticipant(id) {
-      this.$store.dispatch(mainActionTypes.DELETE_PARTICIPANT, id);
-    },
     formatDate(dateString) {
      if (!dateString) return null;
         const date = new Date(dateString);
@@ -250,6 +240,9 @@ export default {
 </script>
 
 <style scoped>
+.participants-container {
+  margin: 20px;
+}
 
 table {
   width: 100%;
