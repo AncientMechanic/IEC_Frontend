@@ -25,6 +25,10 @@
             <input v-model="employer.position" id="position" type="text">
           </div>
           <div class="field-row">
+            <label for="housingProvided">Housing provided:</label>
+            <input v-model="employer.housingProvided" id="housing" type="checkbox">
+          </div>
+          <div class="field-row">
             <label for="wage">Wage:</label>
             <input v-model="employer.wage" id="wage" type="text">
           </div>
@@ -114,19 +118,20 @@
     wage: "",
     position: "",
     jobOfferStatus: "",
+    housingProvided: false,
     componentLoaded: false,
     addIcon,
     };
   },
     computed: {
       employer() {
-    const employers = this.filteredEmployers.filter(employer => employer.jobOfferStatus !== 'Declined');
-    if (employers.length > 0) {
-        return employers[0];
-    } else {
-        return {}; // Возвращаем пустой объект, если нет работодателей с другим статусом
-    }
-},
+          const employers = this.filteredEmployers.filter(employer => employer.jobOfferStatus !== 'Declined');
+          if (employers.length > 0) {
+              return employers[0];
+          } else {
+              return {}; // Возвращаем пустой объект, если нет работодателей с другим статусом
+          }
+      },
       employers() {
         const employers = this.$store.getters[mainGetterTypes.GET_EMPLOYERS];
         return employers;
@@ -177,7 +182,8 @@
         companyAddress: this.employer.companyAddress,
         wage: this.employer.wage,
         position: this.employer.position,
-        jobOfferStatus: this.jobOfferStatus
+        jobOfferStatus: this.jobOfferStatus,
+        housingProvided: this.employer.housingProvided,
       };
       if(this.employer.id === undefined)
       {
@@ -206,7 +212,7 @@
         wage: this.employer.wage,
         position: this.employer.position,
         jobOfferStatus: this.jobOfferStatus,
-
+        housingProvided: this.employer.housingProvided,
       };
       this.$store.dispatch(mainActionTypes.UPDATE_EMPLOYER, {id, data})
       .catch(error => {
@@ -309,6 +315,38 @@
 .field-row textarea:focus {
   outline: none;
   border: 2px solid #6196f5;
+}
+
+.field-row input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #354770;
+  background-color: #ffffff;
+  border-radius: 4px;
+  position: relative;
+  margin-right: 100px;
+  cursor: pointer;
+}
+
+.field-row input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 13px;
+  height: 13px;
+  background-color: #354770;
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.field-row input[type="checkbox"]:checked::before {
+  opacity: 1;
 }
 
 .button-container {

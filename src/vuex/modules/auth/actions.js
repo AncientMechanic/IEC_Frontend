@@ -10,12 +10,12 @@ export default {
       .auth(data)
       .then((result) => {
         commit(mutationTypes.SET_AUTH_TOKEN, result.data.token);
-        Cookies.set('userId', result.data.userId);
+        commit(mutationTypes.SET_USER_ID, result.data.userId);
         router.push({ path: routeInfo.Participants.path, name: routeInfo.Participants.name });
       })
       .catch((error) => {
         console.log(error);
-        throw error;
+        return Promise.reject(error);
       })
       .finally(() => {
         console.log("finally");

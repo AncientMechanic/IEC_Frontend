@@ -7,9 +7,12 @@
           <img src="\src\assets\IEC_Logo2.png" alt="Логотип">
         </div>
         <div class="headers">
-        <h1 class="auth-title" @click="goToHome">International Exchange Center</h1>
-        <h2 class="second-header">International Exchange Center</h2>
+          <h1 class="auth-title" @click="goToHome">International Exchange Center</h1>
+          <h2 class="second-header">International Exchange Center</h2>
         </div>
+      </div>
+      <div class="user-photo-container" v-if="isAuthenticated && userPhoto">
+        <img :src="userPhoto" alt="User Photo" class="user-photo">
       </div>
     </header>
 
@@ -29,6 +32,12 @@
 </template>
 
 <script>
+import { getters as authGetterTypes } from './vuex/modules/auth/types';
+import {
+  actions as mainActionTypes,
+  getters as mainGetterTypes,
+} from "./vuex/store/types";
+import defaultUserPhoto from './assets/default.png';
 import HomeView from './views/Home.vue';
 
 export default {
@@ -39,13 +48,51 @@ export default {
   data() {
     return {
       currentYear: new Date().getFullYear(),
-      showHomeView: false
+      showHomeView: false,
+      userPhoto: defaultUserPhoto // Устанавливаем значение по умолчанию
+    }
+  },
+  computed: {
+    isAuthenticated() {
+      return this.$store.getters[authGetterTypes.GET_TOKEN] !== null;
+    },
+    userId() {
+      return this.$store.getters[authGetterTypes.GET_USER_ID];
+    },
+    currentUser() {
+      return this.$store.getters[mainGetterTypes.GET_CURRENT_USER];
+    }
+  },
+  watch: {
+    userId(newUserId) {
+      if (newUserId) {
+        this.fetchUserPhoto();
+      }
+    },
+    currentUser(newUser) {
+      if (newUser && newUser.photo) {
+        this.userPhoto = `data:image/jpeg;base64,${newUser.photo}`;
+      } else {
+        this.userPhoto = defaultUserPhoto;
+      }
     }
   },
   methods: {
     goToHome() {
       // Используем $router для перехода на компонент /Home.vue
       this.$router.push('../Participants');
+    },
+    fetchUserPhoto() {
+      const userId = this.userId;
+      if (userId) {
+        this.$store.dispatch(mainActionTypes.FETCH_CURRENT_USER, userId)
+          .catch(error => {
+            console.error('Error fetching user photo:', error);
+            this.userPhoto = defaultUserPhoto;
+          });
+      } else {
+        this.userPhoto = defaultUserPhoto;
+      }
     }
   },
   created() {
@@ -53,9 +100,14 @@ export default {
     this.$router.afterEach((to, from) => {
       // Проверяем, является ли новый маршрут маршрутом к Participants
       if (to.name === 'Participants') {
-        this.showHomeView = true; // Если да, скрываем HomeView
+        this.showHomeView = true; 
       }
     });
+
+    // Загружаем фото пользователя при создании компонента
+    if (this.userId) {
+      this.fetchUserPhoto();
+    }
   }
 };
 </script>
@@ -139,5 +191,16 @@ h1 {
 .copyright {
   font-size: 14px;
   color: #666;
+}
+
+.user-photo-container {
+  margin-right: 20px;
+}
+
+.user-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 </style>

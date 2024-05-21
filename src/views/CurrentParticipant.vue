@@ -37,7 +37,7 @@
           </div>
           <div>
             <label for="dateOfBirth">Date of Birth:</label>
-            <input v-bind:value="formattedDateOfBirth" @input="updateDate('dateOfBirth', $event.target.value)" id="dateOfBirth" type="date" />
+            <input v-bind:value="formattedDate(participant.dateOfBirth)" @input="updateDate('dateOfBirth', $event.target.value)" id="dateOfBirth" type="date" />
           </div>
           <div>
             <label for="id">ID:</label>
@@ -95,31 +95,46 @@
         <div class="tab-content-columns">
           <div class="tab-content-column">
             <h3>Documents</h3>
-            <div class="column-content">
+            <div class="column-content-docs">
+              <div>
+                <label for="contractSigned">Contract signed:</label>
+                <input v-model="participant.contractSigned" id="contractSigned" type="checkbox">
+              </div>
+              <div class="has-employer">
+                <label for="hasEmployer">Job offer signed:</label>
+                <input v-model="participant.hasEmployer" id="hasEmployer" type="checkbox" class="hasemployer-checkbox">
+              </div>
               <div>
                 <label for="passport">Passport:</label>
-                <input v-model="participant.passport" id="passport" type="text" class="doc-input">
+                <input v-model="participant.passport" id="passport" type="text" >
+              </div>
+              <div>
+                <label for="passportExpires">Passport expiry date:</label>
+                <input v-bind:value="formattedDate(participant.passportExpires)" @input="updateDate('passportExpires', $event.target.value)" id="passportExpires" type="date" />
               </div>
               <div class="address">
                 <label for="address">Address:</label>
-                <textarea v-model="participant.address" id="address" rows="4" class="doc-input"></textarea>
+                <textarea v-model="participant.address" id="address" rows="4"></textarea>
               </div>
             </div>
           </div>
           <div class="tab-content-column">
             <h3>University</h3>
-            <div class="column-content">
+            <div class="column-content-uni">
               <div class="university">
                 <label for="nameOfUniversity">Name of the university:</label>
-                <textarea v-model="participant.nameOfUniversity" id="nameOfUniversity" type="text" class="university"></textarea>
+                <textarea v-model="participant.nameOfUniversity" id="nameOfUniversity" rows="4"></textarea>
               </div>
               <div>
                 <label for="yearOfStudy">Year of study:</label>
                 <input v-model="participant.yearOfStudy" id="yearOfStudy" type="number" class="year-of-study">
               </div>
-              <div class="has-employer">
-                <label for="hasEmployer">Job offer signed:</label>
-                <input v-model="participant.hasEmployer" id="hasEmployer" type="checkbox" class="checkbox">
+              <div>
+                <label for="formOfStudy">Study form:</label>
+                <select v-model="participant.formOfStudy" id="formOfStudy">
+                  <option value="Full-time">Full time</option>
+                  <option value="Part-time">Part time</option>
+                </select>
               </div>
             </div>
           </div>
@@ -130,37 +145,47 @@
         <current-employer employer="currentEmployer" />
       </div>
       <div v-if="activeTab === 'visa'">
-        <div class="tab-content-column">
-          <h3>Visa Information</h3>
-          <div class="visa-info">
-            <div class="field-row">
-              <label for="prePayment" class="condition-label">
-
-                Pre-payment:
-              </label>
-              <input v-model="participant.prePayment" id="prePayment" type="checkbox" class="checkbox">
+        <div class="tab-content-columns">
+          <div class="tab-content-column">
+            <h3>Visa information</h3>
+            <div class="column-content-visa">
+              <div>
+                <label for="prePayment">Initial payment:</label>
+                <input v-model="participant.prePayment" id="prePayment" type="checkbox">
+              </div>
+              <div>
+                <label for="paymentComplete">Remaining payment:</label>
+                <input v-model="participant.paymentComplete" id="paymentComplete" type="checkbox">
+              </div>
+              <div>
+                <label for="visaApproved">Visa approved:</label>
+                <input v-model="participant.visaApproved" id="visaApproved" type="checkbox">
+              </div>
+              <div>
+                <label for="visaNumber">Visa number:</label>
+                <input v-model="participant.visaNumber" id="visaNumber" type="text">
+              </div>
+              <div>
+                <label for="visaIssued">Visa issued:</label>
+                <input v-bind:value="formattedDate(participant.visaIssued)" @input="updateDate('visaIssued', $event.target.value)" id="visaIssued" type="date" />
+              </div>
+              <div>
+                <label for="visaExpires">Visa exoires:</label>
+                <input v-bind:value="formattedDate(participant.visaExpires)" @input="updateDate('visaExpires', $event.target.value)" id="visaExpires" type="date" />
+              </div>
             </div>
-            <div class="field-row">
-              <label for="paymentComplete" class="condition-label">
-
-                Full payment:
-              </label>
-              <input v-model="participant.paymentComplete" id="paymentComplete" type="checkbox" class="checkbox">
-            </div>
-            <div class="field-row">
-              <label for="visaApproved" class="condition-label">
-
-                Visa approved:
-              </label>
-              <input v-model="participant.visaApproved" id="visaApproved" type="checkbox" class="checkbox">
-            </div>
-            <div class="field-row">
-              <label for="departureDate">Date of departure:</label>
-              <input v-model="participant.departureDate" id="departureDate" type="date" class="date-input">
-            </div>
-            <div class="field-row">
-              <label for="returnDate">Date of arrival:</label>
-              <input v-model="participant.returnDate" id="returnDate" type="date" class="date-input">
+          </div>
+          <div class="tab-content-column">
+            <h3>Flight information</h3>
+            <div class="column-content-visa">
+              <div>
+                <label for="departureDate">Departure date:</label>
+                <input v-model="participant.departureDate" id="departureDate" type="date" class="date-input">
+              </div>
+              <div>
+                <label for="returnDate">Return date:</label>
+                <input v-model="participant.returnDate" id="returnDate" type="date" class="date-input">
+              </div>
             </div>
           </div>
         </div>
@@ -183,7 +208,7 @@ import {
   actions as mainActionTypes,
   getters as mainGetterTypes,
 } from "../vuex/store/types";
-import Cookies from 'js-cookie';
+import { getters as authGetterTypes } from '../vuex/modules/auth/types';
 import CurrentEmployer from "../views/CurrentEmployer.vue";
 import deleteIcon from '../assets/Delete.png';
 import addIcon from '../assets/Plus_dark.png';
@@ -195,7 +220,6 @@ export default {
   },
   data() {
     return {
-      userId: Cookies.get('userId') || "", // Получаем userId из cookies
       lastName: "",
       firstName: "",
       patronymic: "",
@@ -206,6 +230,7 @@ export default {
       season: "",
       address: "",
       passport: "",
+      passportExpires: "",
       yearOfStudy: "",
       program: "",
       servicePlan: "",
@@ -217,6 +242,11 @@ export default {
       returnDate: "",
       activeTab: 'personalInfo',
       photo: "",
+      formOfStudy: "",
+      visaNumber: "",
+      visaIssued: "",
+      visaExpires: "",
+      contractSigned: false,
       participantPhoto: null,
       selectedFile: null,
       defaultPhotoUrl: '../src/assets/default.png',
@@ -228,14 +258,11 @@ export default {
     participant() {
       return this.$store.state.currentParticipant;
     },
-    formattedDateOfBirth() {
-      return this.participant.dateOfBirth ? new Date(this.participant.dateOfBirth).toISOString().split("T")[0] : null;
+    formattedDate() {
+      return (date) => date ? new Date(date).toISOString().split("T")[0] : '';
     },
-    formattedDepartureDate() {
-      return this.participant.departureDate ? new Date(this.participant.departureDate).toISOString().split("T")[0] : null;
-    },
-    formattedReturnDate() {
-      return this.participant.returnDate ? new Date(this.participant.returnDate).toISOString().split("T")[0] : null;
+    userId() {
+      return this.$store.getters[authGetterTypes.GET_USER_ID];
     },
   },
   watch: {
@@ -280,8 +307,15 @@ export default {
       }
     },
     deleteParticipant(id) {
-      this.$store.dispatch(mainActionTypes.DELETE_PARTICIPANT, id);
-      this.$router.push({name: "participants"});
+      this.$store.dispatch(mainActionTypes.DELETE_PARTICIPANT, id)
+      .then(() => {
+          // Переход на страницу Participants после успешного создания участника
+          this.$router.push({ name: 'Participants' });
+        })
+        .catch(error => {
+          console.error("Error deleting participant:", error);
+          // Handle error as needed
+        });
     },
     addParticipant() {
       let data = {
@@ -293,6 +327,7 @@ export default {
         season: this.participant.season,
         address: this.participant.address || '',
         passport: this.participant.passport || '',
+        passportExpires: this.participant.passportExpires,
         nameOfUniversity: this.participant.nameOfUniversity || '',
         yearOfStudy: this.participant.yearOfStudy,
         program: this.participant.program || '',
@@ -303,9 +338,20 @@ export default {
         visaApproved: this.participant.visaApproved || false,
         phoneNumber: this.participant.phoneNumber || '',
         email: this.participant.email || '',
+        formOfStudy: this.participant.formOfStudy || '',
+        visaNumber: this.participant.visaNumber || '',
+        visaIssued: this.participant.visaIssued,
+        visaExpires: this.participant.visaExpires,
+        contractSigned: this.participant.contractSigned || false,
         photo: this.participant.photo || '',
+        departureDate: this.participant.departureDate,
+        returnDate: this.participant.returnDate,
       };
       this.$store.dispatch(mainActionTypes.CREATE_PARTICIPANT, data)
+      .then(() => {
+          // Переход на страницу Participants после успешного создания участника
+          this.$router.push({ name: 'Participants' });
+        })
         .catch(error => {
           console.error("Error adding participant:", error);
           // Handle error as needed
@@ -321,6 +367,7 @@ export default {
         season: this.participant.season,
         address: this.participant.address,
         passport: this.participant.passport,
+        passportExpires: this.participant.passportExpires,
         nameOfUniversity: this.participant.nameOfUniversity,
         yearOfStudy: this.participant.yearOfStudy,
         phoneNumber: this.participant.phoneNumber,
@@ -334,8 +381,17 @@ export default {
         departureDate: this.participant.departureDate,
         returnDate: this.participant.returnDate,
         photo: this.participant.photo,
+        formOfStudy: this.participant.formOfStudy,
+        visaNumber: this.participant.visaNumber,
+        visaIssued: this.participant.visaIssued,
+        visaExpires: this.participant.visaExpires,
+        contractSigned: this.participant.contractSigned,
       };
       this.$store.dispatch(mainActionTypes.UPDATE_PARTICIPANT, { id, data })
+        .then(() => {
+          // Переход на страницу Participants после успешного создания участника
+          this.$router.push({ name: 'Participants' });
+        })
         .catch(error => {
           console.error("Error updating participant:", error);
           // Handle error as needed
@@ -541,7 +597,7 @@ export default {
 
 .tab-content-columns {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1fr;
   gap: 20px; /* Расстояние между колонками */
 }
 
@@ -558,23 +614,41 @@ export default {
   margin-bottom: 20px;
 }
 
-.column-content div {
+.column-content-docs,
+.column-content-uni,
+.column-content-visa {
   display: flex;
-  margin-bottom: 10px;
+  flex-direction: column;
+  color: #354770;
+  font-weight: 450;
+  margin-left: 20px;
 }
 
-.tab-content-column label {
-  flex: 0 0 150px;
-  margin-right: 40px;
-  margin-left: 30px;
+.column-content-docs div,
+.column-content-uni div, 
+.column-content-visa div{
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 13px;
+}
+
+.column-content-docs label,
+.column-content-uni label,
+.column-content-visa label {
+  flex: 0 0 200px;
+  align-items: center;
+  margin-right: 10px;
   white-space: nowrap;
   color: #797979;
-  font-weight: 450;
 }
 
-.tab-content-column input[type="text"],
-.tab-content-column input[type="number"],
-.tab-content-column select {
+.column-content-docs input[type="text"],
+.column-content-docs input[type="date"],
+.column-content-uni input[type="text"],
+.column-content-uni input[type="number"],
+.column-content-visa input[type="date"],
+.column-content-visa input[type="text"],
+.column-content-uni select {
   flex: 1;
   max-width: 315px;
   height: 30px;
@@ -583,8 +657,8 @@ export default {
   border-radius: 5px;
   padding-left: 10px;
   box-sizing: border-box;
-  color: #354770;
   font-weight: 500;
+  align-items: center;
 }
 
 
@@ -605,10 +679,44 @@ export default {
   border: 2px solid #6196F5;
 }
 
-.doc-input {
-  margin-left: -70px;
+.column-content-docs input[type="checkbox"],
+.column-content-uni input[type="checkbox"],
+.column-content-visa input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #354770;
+  background-color: #ffffff;
+  border-radius: 4px;
+  position: relative;
+  margin-right: 100px;
+  cursor: pointer;
 }
-.address textarea {
+
+.column-content-docs input[type="checkbox"]::before,
+.column-content-uni input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 13px;
+  height: 13px;
+  background-color: #354770;
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.column-content-docs input[type="checkbox"]:checked::before,
+.column-content-uni input[type="checkbox"]:checked::before {
+  opacity: 1;
+}
+
+.column-content-docs textarea,
+.column-content-uni textarea {
   flex: 1;
   max-width: 315px;
   border: 1px solid #797979;
@@ -620,25 +728,6 @@ export default {
   font-family: inherit;
   color: #354770;
   font-weight: 450;
-}
-
-.university textarea {
-  flex: 1;
-  max-width: 315px;
-  height: 80px;
-  border: 1px solid #797979;
-  background-color: #F6F8FA;
-  border-radius: 5px;
-  padding-left: 10px;
-  box-sizing: border-box;
-  resize: vertical;
-  font-family: inherit;
-  color: #354770;
-  font-weight: 450;
-}
-
-.year-of-study{
-  margin-left:37px;
 }
 
 .visa-info div{
@@ -646,22 +735,6 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 10px;
-}
-
-.condition-label {
-  min-width: 200px; /* Изменено на min-width */
-  margin-right: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  color: #354770;
-  white-space: nowrap; /* Добавлено, чтобы предотвратить перенос текста */
-}
-
-.has-employer .checkbox {
-  margin-bottom: 8px;
-  margin-left: 37px;
 }
 
 .visa-info .checkbox {
@@ -679,7 +752,7 @@ export default {
   margin-bottom: 8px;
 }
 
-.date-input {
+.column-content-docs input[type="date"] {
   border: 1px solid #797979;
   background-color: #F6F8FA;
   border-radius: 5px;
@@ -692,18 +765,17 @@ export default {
   -moz-appearance: none;
 }
 
-.date-input::-webkit-calendar-picker-indicator {
+.tab-content-column input[type="date"]::-webkit-calendar-picker-indicator {
   color: #354770;
   background-color: transparent;
-  padding-right: 5px;
   cursor: pointer;
 }
 
-.date-input:hover{
+.tab-content-column input[type="date"]:hover{
   border: 1px solid #6196F5;
 }
 
-.date-input:focus{
+.tab-content-column input[type="date"]:focus{
   outline: none;
   border: 2px solid #6196F5;
 }

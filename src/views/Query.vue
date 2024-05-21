@@ -34,6 +34,32 @@
               <option value="">None</option>
             </select>
           </li>
+          <li class="filter-item">
+            <label for="studyForm" class="condition-label">
+              <span class="bullet"></span>
+              Study form:
+            </label>
+            <select v-model="selectedStudyform" id="studyForm" class="dropdown">
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="">None</option>
+            </select>
+          </li>
+          <li class="filter-item">
+            <label for="yearOfStudy" class="condition-label">
+              <span class="bullet"></span>
+              Year of study:
+            </label>
+            <select v-model="selectedYearOfStudy" id="yearOfStudy" class="dropdown">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="">None</option>
+            </select>
+          </li>
         </ul>
       </div>
       <div class="query-container">
@@ -71,11 +97,10 @@ export default {
   data() {
     return {
       conditions: {
-        contractSigned: 'Contract Signed',
+        contractSigned: 'Contract signed',
         hasEmployer: 'Job offer signed',
-        missingDocuments: 'Missing Documents',
-        prePaymentComplete: 'Pre-payment complete',
-        paymentComplete: 'Payment complete',
+        initialComplete: 'Initial payment',
+        paymentComplete: 'Remaining payment',
         visaApproved: 'Visa approved',
         // Добавьте другие условия по мере необходимости
       },
@@ -83,6 +108,8 @@ export default {
       },
       selectedServicePlan: null,
       selectedProgram: null,
+      selectedStudyform: null,
+      selectedYearOfStudy: null,
       filterType: "isOn" // Устанавливаем значение по умолчанию для фильтрации
     };
   },
@@ -99,6 +126,12 @@ export default {
       }
       if (this.selectedProgram) {
         query += `Program: ${this.selectedProgram} & \n`;
+      }
+      if (this.selectedStudyform) {
+        query += `Study form: ${this.selectedStudyform} & \n`;
+      }
+      if (this.selectedYearOfStudy) {
+        query += `Year of study: ${this.selectedYearOfStudy} & \n`;
       }
       return query.slice(0, -3);
     }
@@ -128,6 +161,12 @@ export default {
           return false;
         }
         if (this.selectedProgram && participant.program !== this.selectedProgram) {
+          return false;
+        }
+        if (this.selectedStudyform && participant.formOfStudy !== this.selectedStudyform) {
+          return false;
+        }
+        if (this.selectedYearOfStudy && participant.yearOfStudy !== parseInt(this.selectedYearOfStudy)) {
           return false;
         }
         // Если все условия соответствуют, возвращаем true для текущего участника

@@ -112,18 +112,22 @@ import {
   actions as mainActionTypes,
   getters as mainGetterTypes,
 } from "../vuex/store/types";
-import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
+import prevDisabledIcon from '../assets/Previous_grey.png'; // Импортируйте отсутствующую иконку
+import nextDisabledIcon from '../assets/Next_grey.png'; // Импортируйте отсутствующую иконку
+import nextIcon from '../assets/Next.png'; // Импортируйте отсутствующую иконку
 
 export default {
   name: "ParticipantsView",
   data() {
     return {
-      userId: Cookies.get('userId') || "", // Получаем userId из cookies
       searchQuery: "",
       currentPage: 1, // Текущая страница
       perPage: 5, // Количество строк на странице (по умолчанию 5)
-      pageOptions: [1, 2, 5], // Варианты количества строк на странице
+      pageOptions: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], // Варианты количества строк на странице
+      prevDisabledIcon, // Добавьте эту строку
+      nextDisabledIcon, // Добавьте эту строку
+      nextIcon, // Добавьте эту строку
       };
   },
   computed: {
@@ -210,7 +214,8 @@ export default {
   },
   methods: {
     exportToXLSX() {
-      const data = this.participants.map(participant => ({
+      const data = this.displayedParticipants.map(participant => ({
+        "ID": participant.id,
         "Фамилия": participant.lastName,
         "Имя": participant.firstName,
         "Отчество": participant.patronymic,
@@ -221,6 +226,10 @@ export default {
 
       const worksheet = XLSX.utils.json_to_sheet(data);
       const workbook = XLSX.utils.book_new();
+
+      const columnWidths = [10, 30, 20, 20, 30, 30, 20, 20];
+      worksheet["!cols"] = columnWidths.map(width => ({ wch: width }));
+
       XLSX.utils.book_append_sheet(workbook, worksheet, "Участники");
       XLSX.writeFile(workbook, "участники.xlsx");
     },

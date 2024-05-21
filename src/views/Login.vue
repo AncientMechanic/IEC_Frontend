@@ -18,13 +18,11 @@
               :type="showEmail ? 'text' : 'password'"
               required
               :class="{ 'input-error': authError }"
-
             />
             <span class="toggle-visibility" @click="toggleEmailVisibility">
               <i :class="showEmail ? 'fa fa-eye-slash' : 'fa fa-eye'" aria-hidden="true"></i>
             </span>
           </div>
-          <div class="error-message" v-if="emailError">{{ emailError }}</div>
         </div>
         <div class="form-group">
           <div class="input-label">Password</div>
@@ -40,7 +38,7 @@
               <i :class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'" aria-hidden="true"></i>
             </span>
           </div>
-          <div class="error-message" v-if="passwordError">{{ passwordError }}</div>
+          <div class="error-message" v-if="authError">Wrong email or password</div>
         </div>
         <div class="form-actions">
           <span class="forgot-password" @click="showMessage">Forgot password?</span>
@@ -54,7 +52,6 @@
 
 <script>
 import { actions as authActionTypes } from "../vuex/modules/auth/types";
-import Cookies from 'js-cookie';
 
 export default {
   name: "LoginView",
@@ -66,47 +63,38 @@ export default {
       showEmail: false,
       showPassword: false,
       messageTimeout: null, // Добавляем свойство для хранения таймера
-      emailError: "",
-      passwordError: "",
-      authError: false,
+      authError: false, // Добавьте это свойство
       userId: "",
     };
   },
   methods: {
     login() {
-      this.clearErrors();
       const email = this.email;
       const password = this.password;
 
-      // Здесь вы можете добавить логику для проверки данных
-      // и установки ошибок в случае неправильного ввода
-      /*if (!this.validateEmail(email)) {
-        this.emailError = "Invalid email format";
-      }
-      if (!this.validatePassword(password)) {
-        this.passwordError = "Password must be at least 8 characters long";
-      }*/
-
-      // Если нет ошибок, отправляем данные на сервер
-      if (!this.emailError && !this.passwordError) {
-        this.$store.dispatch(authActionTypes.AUTH_REQUEST, { email, password })
-        .then((response) => {
-          // Успешная авторизация
-          console.log('Авторизация прошла успешно.');
+      this.$store.dispatch(authActionTypes.AUTH_REQUEST, { email, password })
+        .then(response => {
+          // Проверяем ответ от сервера
+          if (response.data.success) {
+            // Успешная авторизация
+            console.log('Авторизация прошла успешно.');
+            this.authError = false; // Сбросьте ошибку авторизации
+          } else {
+            // Неверные данные для авторизации
+            console.error('Неверные данные для авторизации');
+            this.authError = true; // Установите флаг ошибки авторизации
+          }
         })
-        .catch((error) => {
-          // Ошибка авторизации
-          console.error('Произошла ошибка во время авторизации:', error);
+        .catch(error => {
+          // Другие ошибки
+          console.error('Ошибка авторизации:', error);
+          this.authError = true; // Установите флаг ошибки авторизации
         });
-      }
     },
-    clearErrors() {
-      this.emailError = "";
-      this.passwordError = "";
-    },
-    loginError() {
-      
-    },
+
+      clearErrors() {
+        this.authError = false;
+      },
     /*validateEmail(email) {
       // Здесь вы можете добавить свою логику для проверки email
       const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -116,6 +104,7 @@ export default {
       // Здесь вы можете добавить свою логику для проверки пароля
       return password.length >= 8;
     },*/
+
     showMessage() {
       if (this.showMessageFlag) {
         // Если сообщение уже отображается, скрываем его
@@ -169,14 +158,13 @@ export default {
   align-items: center;
   max-width: 400px;
   width: 100%;
-  z-index: 1; /* Добавляем z-index для формы */
-  position: relative; /* Добавляем position: relative для формы */
+  z-index: 1;
+  position: relative;
 }
 
 .logo-container {
   display: flex;
   justify-content: center;
-
 }
 
 .logo {
@@ -196,10 +184,57 @@ export default {
   text-align: left;
 }
 
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
+.input-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  margin: 2px 0 5px 0;
+  color: #888;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+input {
+  width: 100%;
+  padding: 10px 30px 10px 10px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  box-shadow: 0 0px 10px rgba(1, 1, 1, 0.167);
+  outline: none;
+}
+
+input:focus {
+  outline: 2px solid #6196F5;
+}
+
+input.input-error {
+  border-color: #ff6347;
+}
+
+input.input-error:focus {
+  outline: none;
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #888;
+}
+
+.back-link {
+  margin-left: -170px;
+  position: absolute;
+  text-decoration: none;
+}
+
+.back-arrow {
+  width: 24px;
+  height: 24px;
 }
 
 .btn-login {
@@ -209,7 +244,7 @@ label {
   text-decoration: none;
   border-radius: 5px;
   transition: background-color 0.3s ease;
-  width: 133px; /* Устанавливаем одинаковую ширину для обеих кнопок */
+  width: 133px;
   height: 40px;
 }
 
@@ -248,62 +283,11 @@ label {
 .message.show {
   opacity: 1;
   transform: translateX(-50%) translateY(5px);
-  
-}
-
-.input-group {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.input-label {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  margin: 2px 0 5px 0;
-  color: #888;
-}
-
-input {
-  width: 100%;
-  padding: 10px 30px 10px 10px;
-  border: 0px solid #ccc;
-  border-radius: 7px;
-  box-shadow: 0 0px 10px rgba(1, 1, 1, 0.167);
-  outline: none;
-}
-
-input:focus {
-  outline: 2px solid #6196F5; /* Задаем новый контур при фокусе */
-}
-
-.toggle-visibility {
-  position: absolute;
-  right: 10px;
-  cursor: pointer;
-  color: #888;
-}
-
-.back-link {
-  margin-left: -170px;
-  position: absolute;
-  text-decoration: none;
-}
-
-.back-arrow {
-  width: 24px;
-  height: 24px;
-}
-
-.login-form input.input-error {
-  border-color: #ff6347;
 }
 
 .error-message {
-  color: #ff6347; /* Красноватый цвет */
+  color: #ff6347;
   font-size: 14px;
   margin-top: 5px;
 }
-
 </style>

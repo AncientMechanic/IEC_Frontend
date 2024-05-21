@@ -17,7 +17,7 @@
         <router-link to="/users" class="nav-link">
           <div class="nav-link-content">
             <img src="src\assets\Users.png" alt="User Icon" class="nav-icon-users" />
-            <span class="nav-link-text">Users</span>
+            <span class="nav-link-text">Staff members</span>
           </div>
         </router-link>
         <img src="src\assets\Logout.png" alt="Logout Icon" class="logout-icon" @click="logout" />
@@ -32,13 +32,13 @@
 </template>
 
 <script>
-import { actions as authActionTypes, getters as authGetterTypes } from "../vuex/modules/auth/types";
+import { mutations as authActionTypes, getters as authGetterTypes } from "../vuex/modules/auth/types";
 import routeInfo from "../router/routeInfo";
 
 export default {
   name: "HomeView",
   methods: {
-    /*logout() {
+    logout() {
       this.$store.commit(authActionTypes.SET_AUTH_TOKEN, null);
       this.$router.push({ name: routeInfo.Start.name });
     },
@@ -46,7 +46,7 @@ export default {
   computed: {
     isAuthenticated() {
       return this.$store.getters[authGetterTypes.GET_TOKEN] !== null;
-    },*/
+    },
   },
 };
 </script>

@@ -7,4 +7,7 @@ export default {
   [mutationTypes.FIRST](state, data) {
     console.log(data);
   },
+  [mutationTypes.SET_USER_ID](state, userId) {
+    state.userId = userId;
+  },
 };

@@ -22,6 +22,12 @@
           </div>
         </div>
         <div class="form-group">
+          <div class="input-label">Phone Number</div>
+          <div class="input-group">
+            <input id="phone" v-model="phonenumber" type="tel" required />
+          </div>
+        </div>
+        <div class="form-group">
           <div class="input-label">Email</div>
           <div class="input-group">
             <input
@@ -62,6 +68,15 @@
           </div>
           <div class="error-message" v-if="passwordMatchError">{{ passwordMatchError }}</div>
         </div>
+        <div class="form-group">
+          <div class="input-label">Profile Photo</div>
+          <div class="input-group file-input">
+            <input type="file" @change="handleFileUpload" accept="image/*" id="file-input" />
+            <label for="file-input" class="btn-file">Select file</label>
+            <span class="file-name" v-if="!selectedFile">File not selected</span>
+            <span class="file-name" v-else>{{ selectedFile.name }}</span>
+          </div>
+        </div>
         <div class="form-actions">
           <button type="submit" class="btn-register">REGISTER</button>
         </div>
@@ -85,6 +100,10 @@ export default {
       showPasswordConfirm: false,
       passwordMatchError: "", // Новое свойство
       passwordLengthError: "", // Новое свойство
+      phonenumber: "", // Новое свойство
+      photo: null, // Новое свойство
+      selectedFile: null, // Новое свойство
+      photoBase64: null,
     };
   },
   methods: {
@@ -93,6 +112,8 @@ export default {
       const email = this.email;
       const password = this.password;
       const password_confirmation = this.password_confirmation;
+      const phonenumber = this.phonenumber;
+      const photo = this.photoBase64; // Используйте photoBase64
 
       if (password.length < 8) {
         this.passwordLengthError = "Password must be at least 8 characters long";
@@ -118,13 +139,37 @@ export default {
         email,
         password,
         password_confirmation,
+        phonenumber, // Новый параметр
+        photo, // Новый параметр
       });
+    },
+    onFileChange(event) {
+      this.profilePhoto = event.target.files[0];
+      this.selectedFile = event.target.files[0]; // Установка выбранного файла
     },
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
     togglePasswordConfirmVisibility() {
       this.showPasswordConfirm = !this.showPasswordConfirm;
+    },
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.selectedFile = file;
+        this.photo = URL.createObjectURL(file);
+
+        // Преобразование файла в Base64
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.photoBase64 = reader.result.split(',')[1];
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this.selectedFile = null;
+        this.photo = null;
+        this.photoBase64 = null;
+      }
     },
   },
 };
@@ -135,7 +180,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 120vh;
 }
 
 .register-form {
@@ -224,8 +269,8 @@ input:focus {
 
 .form-actions {
   display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  justify-content: right;
+  margin-top: 30px;
 }
 
 .back-link {
@@ -243,5 +288,45 @@ input:focus {
   color: #ff6347;
   font-size: 14px;
   margin-top: 5px;
+}
+
+.file-input {
+  display: flex;
+  align-items: center;
+}
+
+.file-input input[type="file"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  font-size: 0;
+}
+
+.file-input .btn-file {
+  display: inline-block;
+  border: 2px solid #354770;
+  background-color: #F6F8FA;
+  color: #354770;
+  padding: 4px 20px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+  position: relative; /* Добавлено */
+  z-index: 1;
+}
+
+.file-input .btn-file:hover,
+.file-input label:hover {
+  background-color: #6196F5;
+  border: #6196F5 solid 2px;
+  color: #F6F8FA;
+  cursor: pointer;
+}
+
+.file-name {
+  color: #888;
+  font-size: 16px;
+  margin-left: 20px;
 }
 </style>
