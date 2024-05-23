@@ -33,13 +33,20 @@
 
 <script>
 import { mutations as authActionTypes, getters as authGetterTypes } from "../vuex/modules/auth/types";
+import { mutations as authMutationTypes } from "../vuex/modules/auth/types";
 import routeInfo from "../router/routeInfo";
 
 export default {
   name: "HomeView",
   methods: {
     logout() {
-      this.$store.commit(authActionTypes.SET_AUTH_TOKEN, null);
+      // Сбрасываем токен авторизации
+      this.$store.commit(authMutationTypes.SET_AUTH_TOKEN, null);
+
+      // Устанавливаем showHomeView в false
+      this.$parent.showHomeView = false;
+
+      // Перенаправляем на стартовую страницу
       this.$router.push({ name: routeInfo.Start.name });
     },
   },

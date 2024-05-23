@@ -28,9 +28,21 @@
               Program:
             </label>
             <select v-model="selectedProgram" id="program" class="dropdown">
-              <option value="Work&TravelUSA">Work&Travel USA</option>
-              <option value="Australia">Australia</option>
-              <option value="Vietnam">Vietnam</option>
+              <option value="Work&TravelUSA">Work & Travel USA</option>
+              <option value="Work&TravelArgentina">Work & Travel Argentina</option>
+              <option value="WorkExperienceInSpain">Work Experienxe in Spain</option>
+              <option value="WorkInChina">Work in China</option>
+              <option value="WorkInFrance">Work in France</option>
+              <option value="TeachInThailand">Teach in Thailand</option>
+              <option value="Study&WorkInCanada">Study & Work in Canada</option>
+              <option value="Study&WorkInDublin">Study & Work in Dublin</option>
+              <option value="StudyInItaly">Study in Italy</option>
+              <option value="InternshipInChile">Internship in Chile</option>
+              <option value="InternshipInBrazil">Internship in Brazil</option>
+              <option value="InternshipInMexico">Internship in Mexico</option>
+              <option value="InternshipInGermany">Internship in Germany</option>
+              <option value="InternshipInBritain">Internship in Britain</option>
+              <option value="InternshipInBrazil">Internship in Brazil</option>
               <option value="">None</option>
             </select>
           </li>
@@ -99,7 +111,7 @@ export default {
       conditions: {
         contractSigned: 'Contract signed',
         hasEmployer: 'Job offer signed',
-        initialComplete: 'Initial payment',
+        prePayment: 'Initial payment',
         paymentComplete: 'Remaining payment',
         visaApproved: 'Visa approved',
         // Добавьте другие условия по мере необходимости

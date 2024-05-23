@@ -2,10 +2,10 @@
   <div class="login-container font-Montserrat">
     <div class="login-form">
       <router-link to="/" class="back-link">
-        <img src="src\assets\Arrow.png" alt="Back" class="back-arrow" />
+        <img src="src/assets/Arrow.png" alt="Back" class="back-arrow" />
       </router-link>
       <div class="logo-container">
-        <img src="src\assets\User2.png" alt="Logo" class="logo" />
+        <img src="src/assets/User2.png" alt="Logo" class="logo" />
       </div>
       <h2 class="form-title">Sign in</h2>
       <form @submit.prevent="login">
@@ -45,7 +45,7 @@
           <button type="submit" class="btn-login">LOGIN</button>
         </div>
       </form>
-      <div class="message" v-if="showMessageFlag">Please reach out to Your superviser to retrieve Your access data</div>
+      <div class="message" v-if="showMessageFlag">Please reach out to Your supervisor to retrieve Your access data</div>
     </div>
   </div>
 </template>
@@ -62,13 +62,14 @@ export default {
       showMessageFlag: false,
       showEmail: false,
       showPassword: false,
-      messageTimeout: null, // Добавляем свойство для хранения таймера
-      authError: false, // Добавьте это свойство
+      messageTimeout: null,
+      authError: false,
       userId: "",
     };
   },
   methods: {
     login() {
+      this.clearErrors(); // Сброс ошибки перед запросом
       const email = this.email;
       const password = this.password;
 
@@ -78,39 +79,34 @@ export default {
           if (response.data.success) {
             // Успешная авторизация
             console.log('Авторизация прошла успешно.');
-            this.authError = false; // Сбросьте ошибку авторизации
+            this.authError = false;
+            this.emailError = false;
+            this.passwordError = false;
           } else {
             // Неверные данные для авторизации
             console.error('Неверные данные для авторизации');
-            this.authError = true; // Установите флаг ошибки авторизации
+            setTimeout(() => {
+              this.setAuthErrors();
+            }, 700); // Задержка 500 мс перед установкой ошибок
           }
         })
         .catch(error => {
           // Другие ошибки
           console.error('Ошибка авторизации:', error);
-          this.authError = true; // Установите флаг ошибки авторизации
+          setTimeout(() => {
+            this.setAuthErrors();
+          }, 700); // Задержка 500 мс перед установкой ошибок
         });
     },
 
-      clearErrors() {
-        this.authError = false;
-      },
-    /*validateEmail(email) {
-      // Здесь вы можете добавить свою логику для проверки email
-      const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-      return emailRegex.test(email);
+    clearErrors() {
+      this.authError = false;
     },
-    validatePassword(password) {
-      // Здесь вы можете добавить свою логику для проверки пароля
-      return password.length >= 8;
-    },*/
 
     showMessage() {
       if (this.showMessageFlag) {
-        // Если сообщение уже отображается, скрываем его
         this.hideMessage();
       } else {
-        // Если сообщение не отображается, показываем его
         this.showMessageFlag = true;
         setTimeout(() => {
           this.$nextTick(() => {
@@ -123,20 +119,29 @@ export default {
         }, 10000);
       }
     },
+
     hideMessage() {
       this.showMessageFlag = false;
       this.$nextTick(() => {
         const messageElement = this.$el.querySelector(".message");
         messageElement.classList.remove("show");
       });
-      clearTimeout(this.messageTimeout); // Очищаем таймер
+      clearTimeout(this.messageTimeout);
     },
+
     toggleEmailVisibility() {
       this.showEmail = !this.showEmail;
     },
+
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
+
+    setAuthErrors() {
+    this.authError = true;
+    this.emailError = true;
+    this.passwordError = true;
+  },
   },
 };
 </script>

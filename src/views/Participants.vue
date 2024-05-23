@@ -34,7 +34,7 @@
           <div class="column-header">
             <th>ID</th>
             <th>Last name</th>
-            <th>First Name</th>
+            <th>First name</th>
             <th>Patronymic</th>
             <th>Date of birth</th>
             <th>Season</th>

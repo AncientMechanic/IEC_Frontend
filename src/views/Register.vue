@@ -179,8 +179,11 @@ export default {
 .register-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 120vh;
+  align-items: flex-start; /* Изменено с center на flex-start */
+  min-height: 100vh; /* Добавлено min-height */
+  padding-top: 10%; /* Добавлено отступ сверху */
+  padding-bottom: 10%; /* Добавлено отступ сверху */
+  margin-left: 16px;
 }
 
 .register-form {

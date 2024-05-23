@@ -61,8 +61,20 @@
             <label for="program">Program:</label>
             <select v-model="participant.program" id="program">
               <option value="Work&TravelUSA">Work & Travel USA</option>
-              <option value="Australia">Australia</option>
-              <option value="Vietnam">Vietnam</option>
+              <option value="Work&TravelArgentina">Work & Travel Argentina</option>
+              <option value="WorkExperienceInSpain">Work Experienxe in Spain</option>
+              <option value="WorkInChina">Work in China</option>
+              <option value="WorkInFrance">Work in France</option>
+              <option value="TeachInThailand">Teach in Thailand</option>
+              <option value="Study&WorkInCanada">Study & Work in Canada</option>
+              <option value="Study&WorkInDublin">Study & Work in Dublin</option>
+              <option value="StudyInItaly">Study in Italy</option>
+              <option value="InternshipInChile">Internship in Chile</option>
+              <option value="InternshipInBrazil">Internship in Brazil</option>
+              <option value="InternshipInMexico">Internship in Mexico</option>
+              <option value="InternshipInGermany">Internship in Germany</option>
+              <option value="InternshipInBritain">Internship in Britain</option>
+              <option value="InternshipInBrazil">Internship in Brazil</option>
             </select>
           </div>
           <div>
@@ -170,7 +182,7 @@
                 <input v-bind:value="formattedDate(participant.visaIssued)" @input="updateDate('visaIssued', $event.target.value)" id="visaIssued" type="date" />
               </div>
               <div>
-                <label for="visaExpires">Visa exoires:</label>
+                <label for="visaExpires">Visa expires:</label>
                 <input v-bind:value="formattedDate(participant.visaExpires)" @input="updateDate('visaExpires', $event.target.value)" id="visaExpires" type="date" />
               </div>
             </div>
@@ -180,11 +192,11 @@
             <div class="column-content-visa">
               <div>
                 <label for="departureDate">Departure date:</label>
-                <input v-model="participant.departureDate" id="departureDate" type="date" class="date-input">
+                <input v-bind:value="formattedDate(participant.departureDate)" @input="updateDate('departureDate', $event.target.value)" id="departureDate" type="date" />
               </div>
               <div>
                 <label for="returnDate">Return date:</label>
-                <input v-model="participant.returnDate" id="returnDate" type="date" class="date-input">
+                <input v-bind:value="formattedDate(participant.returnDate)" @input="updateDate('returnDate', $event.target.value)" id="returnDate" type="date" />
               </div>
             </div>
           </div>
@@ -696,7 +708,8 @@ export default {
 }
 
 .column-content-docs input[type="checkbox"]::before,
-.column-content-uni input[type="checkbox"]::before {
+.column-content-uni input[type="checkbox"]::before,
+.column-content-visa input[type="checkbox"]::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -711,7 +724,8 @@ export default {
 }
 
 .column-content-docs input[type="checkbox"]:checked::before,
-.column-content-uni input[type="checkbox"]:checked::before {
+.column-content-uni input[type="checkbox"]:checked::before,
+.column-content-visa input[type="checkbox"]:checked::before {
   opacity: 1;
 }
 
@@ -735,21 +749,6 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   margin-bottom: 10px;
-}
-
-.visa-info .checkbox {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #354770;
-  background-color: #ffffff;
-  border-radius: 4px;
-  position: relative;
-  cursor: pointer;
-  margin-left: 45px;
-  margin-bottom: 8px;
 }
 
 .column-content-docs input[type="date"] {
