@@ -5,7 +5,7 @@
       <input type="text" v-model="searchQuery" placeholder="Search for an employer" class="search-input">
     </div>
     <div class="header-container">
-      <h1 class="page-title">Employers</h1>
+      <h1 class="page-title">Job offers</h1>
       <div class="button-container">
         <button @click="exportToXLSX" class="icon-btn-dnld">
           <span>Download</span>
@@ -109,7 +109,7 @@ export default {
       searchQuery: "",
       currentPage: 1, // Текущая страница
       perPage: 5, // Количество строк на странице (по умолчанию 5)
-      pageOptions: [1, 2, 5], // Варианты количества строк на странице
+      pageOptions: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], // Варианты количества строк на странице
     };
   },
   computed: {
@@ -285,7 +285,7 @@ th, td {
 
 .column-header {
   display: grid;
-  grid-template-columns: 8% 13% 8% 8% 15% 12% 10% 8% 10% 8%; /* Ширина столбцов */
+  grid-template-columns: 8% 13% 10% 7% 13% 15% 10% 8% 10% 6%; /* Ширина столбцов */
   align-items: center;
   background-color: #F6F8FA;
   padding: 10px;
@@ -305,7 +305,7 @@ th, td {
 
 .row-container {
   display: grid;
-  grid-template-columns: 8% 13% 8% 8% 15% 12% 10% 8% 10% 8%; /* Ширина столбцов */
+  grid-template-columns: 8% 13% 10% 7% 13% 15% 10% 8% 10% 6%; /* Ширина столбцов */
   align-items: center;
   background-color: #F6F8FA;
   border-radius: 10px;

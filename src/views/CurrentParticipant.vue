@@ -166,7 +166,7 @@
                 <input v-model="participant.prePayment" id="prePayment" type="checkbox">
               </div>
               <div>
-                <label for="paymentComplete">Remaining payment:</label>
+                <label for="paymentComplete">Program payment:</label>
                 <input v-model="participant.paymentComplete" id="paymentComplete" type="checkbox">
               </div>
               <div>

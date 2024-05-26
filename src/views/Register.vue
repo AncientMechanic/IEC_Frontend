@@ -10,7 +10,7 @@
       <h2 class="form-title">Register</h2>
       <form @submit.prevent="register">
         <div class="form-group">
-          <div class="input-label">Name</div>
+          <div class="input-label">Full name</div>
           <div class="input-group">
             <input
               id="name"

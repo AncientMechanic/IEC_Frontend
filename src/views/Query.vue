@@ -112,7 +112,7 @@ export default {
         contractSigned: 'Contract signed',
         hasEmployer: 'Job offer signed',
         prePayment: 'Initial payment',
-        paymentComplete: 'Remaining payment',
+        paymentComplete: 'Program payment',
         visaApproved: 'Visa approved',
         // Добавьте другие условия по мере необходимости
       },

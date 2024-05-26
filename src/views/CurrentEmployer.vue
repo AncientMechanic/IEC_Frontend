@@ -229,18 +229,9 @@
   margin-top: -10px;
 }
 
-.current-employer h2 {
-  margin-top: -20px;
-  margin-bottom: 20px;
-  font-size: 27px;
-  font-weight: 550;
-  color: #354770;
-  text-decoration: none;
-}
-
 .employer-info-container {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1fr;
   gap: 20px; /* Расстояние между колонками */
   margin-bottom: 20px;
 }
@@ -406,7 +397,6 @@
 
 table {
   width: 100%;
-  border-collapse: collapse;
 }
 
 th, td {
@@ -418,7 +408,7 @@ th, td {
 }
 .column-header {
   display: grid;
-  grid-template-columns: 10% 20% 80%; /* Ширина столбцов */
+  grid-template-columns: 10% 20% 70%; /* Ширина столбцов */
   align-items: center;
   padding: 10px;
   border-radius: 10px;
@@ -438,7 +428,7 @@ th, td {
 
 .row-container {
   display: grid;
-  grid-template-columns: 10% 20% 80%; /* Ширина столбцов */
+  grid-template-columns: 10% 20% 70%; /* Ширина столбцов */
   align-items: center;
   background-color: #F6F8FA;
   border-radius: 10px;
